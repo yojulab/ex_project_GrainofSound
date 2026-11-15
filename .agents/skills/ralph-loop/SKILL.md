@@ -33,7 +33,7 @@ Ralph Loop(Ralph Wiggum Technique)은 **"Iteration > Perfection (반복이 완�
        "current_iteration": 0,
        "max_iterations": 10,
        "completion_promise": "PROMISE_MET: COMPLETED",
-       "task_description": "미래스마트산업진흥원 Next.js 포털 레이아웃 및 GNB 메가메뉴 구현"
+       "task_description": "연희단 결(GYEOL) 원페이지 5단계 스토리텔링 섹션 및 3대 액션 모달 폼 구현"
      }
      ```
   2. `.agents/hooks.json`에 `stop_hook.py` 등록.

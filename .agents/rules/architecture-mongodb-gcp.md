@@ -1,11 +1,13 @@
-# GCP 인프라 & 자체 운영 MongoDB 아키텍처 가이드
+# 네트워크·인프라(`https://neptune.axfoundly.com`, Port `30030`) & 자체 운영 MongoDB(`grain_of_sound`) 아키텍처 가이드
 
-- **문서 참조**: `docs/작업지시서.md` §5 (기술 스택 및 아키텍처), §5.2~5.3 (GCP 구성), §9 (WBS T-02~T-04)
-- **핵심 인프라 방침**: 
-  1. **MongoDB 자체 운영**: Atlas SaaS가 아닌 **GCP Compute Engine(GCE) VM**에 MongoDB 직접 설치·운영
-  2. **VPC 사설망 완전 격리**: DB VM은 외부 공인 IP를 갖지 않으며(No Public IP), 사설 서브넷(27017) 내부에서만 통신
-  3. **Serverless VPC Access**: Cloud Run(Next.js)과 GCE VM을 전용 커넥터로 연결
-  4. **자동 백업 파이프라인**: VM 내부 Cron을 통해 매일 새벽 `mongodump` 실행 후 Cloud Storage(GCS)로 아카이빙
+- **문서 참조**: [`docs/PRDs/gyeol.md`](file:///apps/ex_project_GrainofSound/docs/PRDs/gyeol.md) §4~§5 및 인프라 지정 사양
+- **핵심 인프라 방침**:
+  1. **공식 도메인 및 서비스 포트**: **`https://neptune.axfoundly.com`** / 애플리케이션 바인딩 포트 **`30030`** (`0.0.0.0:30030`, 디버그 인스펙터 포트 `30031`)
+  2. **데이터베이스 명칭 (`grain_of_sound`)**: MongoDB 접속 DB명은 **`grain_of_sound`**를 사용하며, 3대 핵심 액션 폼(공연 섭외 신청, 단원 지원, 후원회원 가입 문의) 및 공연 아카이브 데이터를 영속화한다.
+  3. **폼 데이터 하이브리드 수신 (DB + 즉시 알림 + 카카오톡 오픈채팅 병행)**:
+     - 모달 간편 폼 제출 시 Next.js Serverless API를 통해 MongoDB(`grain_of_sound`)에 안전하게 기록함과 동시에 운영자 이메일(SMTP)/웹훅/스프레드시트로 즉시 알림을 발송한다.
+     - 모든 모달 하단에는 **카카오톡 오픈채팅방 1:1 직통 버튼**을 병행 배치하여 모바일 사용자의 선택권을 보장한다.
+  4. **VPC 사설망 격리 및 자동 백업**: 운영 환경 GCE VM MongoDB는 외부 공인 IP를 갖지 않으며(No Public IP), 매일 새벽 `mongodump`로 `grain_of_sound` DB를 백업한다.
 
 ---
 
@@ -13,109 +15,76 @@
 
 ```mermaid
 flowchart TD
-    subgraph Users ["사용자 계층"]
-        PUB["방문자 (PC / 모바일)"]
-        ADM["기관 관리자"]
+    subgraph Users ["방문자 계층 (Mobile-First / 카카오톡 인앱)"]
+        VISITOR["방문자 (복지관/지자체 섭외담당, 단원지원자, 후원희망자)"]
+        KAKAO["카카오톡 채팅방 공유 스크래퍼 (OG 1200x630)"]
     end
 
-    subgraph GCP ["Google Cloud Platform (서울 리전: asia-northeast3)"]
-        LB["Cloud Load Balancing + Cloud CDN + Cloud Armor (WAF)"]
-
-        subgraph Serverless ["App 계층 (Serverless)"]
-            CR["Cloud Run: Next.js App<br>(SSR / Public Pages / Admin / APIs)"]
-            JOB["Cloud Run Job:<br>검색 인덱스 & 임베딩 빌더"]
-        end
-
-        subgraph VPC ["Custom VPC Network (Private Subnet)"]
-            SVPCC["Serverless VPC Access 커넥터"]
-            
-            subgraph GCE ["Database 계층 (GCE VM)"]
-                VM["Compute Engine (e2-standard-2 / Ubuntu 24.04)<br><b>MongoDB 자체 운영 (SCRAM-SHA-256)</b>"]
-                PD[("Persistent Disk (Balanced SSD 50~100GB)<br>데이터 볼륨")]
-                VM --- PD
-            end
-        end
-
-        subgraph Storage ["스토리지 & 보안 계층"]
-            GCS_MEDIA[("Cloud Storage (첨부/이미지)")]
-            GCS_AI[("Cloud Storage (search-index.json / AI 모델)")]
-            GCS_BACKUP[("Cloud Storage (DB 일일 백업 아카이브)")]
-            SM["Secret Manager (DB 접속문자열, 세션 시크릿)"]
-        end
+    subgraph AppLayer ["애플리케이션 계층 (https://neptune.axfoundly.com : Port 30030)"]
+        WEB["Next.js App (Port 30030)<br>One-Page 5단계 스토리텔링 + 3대 액션 모달 + Sticky CTA"]
+        API["Serverless Form Handlers<br>/api/actions/performance | member | supporter"]
     end
 
-    PUB -->|HTTPS| LB
-    ADM -->|HTTPS| LB
-    LB --> CR
-    
-    CR -->|환경변수 주입| SM
-    CR -->|서명 업로드/다운로드| GCS_MEDIA
-    CR -->|VPC 커넥터 경유| SVPCC
-    SVPCC -->|내부 IP 통신 (27017)| VM
+    subgraph DataAndNotify ["데이터베이스 (grain_of_sound) & 알림 채널"]
+        MONGO[("MongoDB: <b>grain_of_sound</b><br>(performanceRequests, memberApplications,<br>supporterInquiries, archiveItems)")]
+        NOTIFY["즉시 알림 채널<br>(SMTP 이메일 / Google Sheets Webhook)"]
+        OPENCHAT["카카오톡 1:1 오픈채팅 직통 연결"]
+    end
 
-    CR -.게시물 변경 트리거.-> JOB
-    JOB -->|데이터 추출| SVPCC
-    JOB -->|인덱스 파일 배포| GCS_AI
-
-    PUB -.인덱스 & 모델 다운로드.-> GCS_AI
-
-    VM -.일일 자동 백업 (mongodump).-> GCS_BACKUP
+    VISITOR -->|HTTPS (100dvh)| WEB
+    KAKAO -->|OG 메타태그 수집| WEB
+    WEB -->|방식 A: 간편 폼 제출| API
+    WEB -->|방식 B: 카톡 직통 클릭| OPENCHAT
+    API -->|영속화 저장| MONGO
+    API -->|실시간 발송| NOTIFY
 ```
 
 ---
 
-## 2. GCP 인프라 상세 스펙
+## 2. 네트워크, 포트 및 환경변수 상세 규격
 
-### 2-1. Next.js App (Cloud Run)
-- **컨테이너 환경**: 무상태(Stateless) 도커 컨테이너, CPU 1~2 vCPU, RAM 1~2GB.
-- **스케일링**: 0~10 인스턴스 자동 확장, 최소 인스턴스 1대 유지(콜드스타트 방지).
-- **VPC 연동**: `Serverless VPC Access Connector`를 통해 서브넷 내부 IP(`10.x.x.x`)로 DB 접속.
-- **보안 헤더**: HSTS, X-Content-Type-Options: nosniff, X-Frame-Options: SAMEORIGIN, Strict CSP.
+### 2-1. 도메인 및 포트 바인딩 (`Port 30030`)
+- **프로덕션/외부 접속 도메인**: `https://neptune.axfoundly.com`
+- **내부 컨테이너/서버 리스닝 포트**: `30030` (`PORT=30030`, `HOSTNAME=0.0.0.0`)
+- **Node.js 디버그 인스펙터 포트**: `30031`
+- **통합 기동 스크립트 (`run_port.sh`)**:
+  - `./run_port.sh dev` / `./run_port.sh prod` 실행 시 기본 포트 `30030`으로 기동한다.
 
-### 2-2. MongoDB GCE VM (Compute Engine)
-- **인스턴스 스펙**: `e2-standard-2` (2 vCPU, 8GB RAM), Ubuntu 24.04 LTS.
-- **스토리지**: Persistent Disk (Balanced SSD) 50GB~100GB, 마운트 경로 `/var/lib/mongodb`.
-- **네트워크 보안**:
-  - **No External IP (외부 공인 IP 미할당)**.
-  - VPC 방화벽: 외부 인터넷의 `27017` 인바운드 100% 차단.
-  - Serverless VPC Connector 서브넷 IP 대역에서만 `tcp:27017` 인바운드 허용.
-  - OS 패키지 업데이트는 Cloud NAT를 통해 아웃바운드만 허용.
-- **DB 보안 설정**:
-  - `mongod.conf`: `security.authorization: enabled` (SCRAM-SHA-256 인증 활성화).
-  - 관리자 계정(`admin`) 및 전용 애플리케이션 계정(`fsi_app`)의 읽기/쓰기 최소 권한 원칙 적용.
+### 2-2. MongoDB `grain_of_sound` 데이터베이스 구성
+- **접속 URI 규격 (`.env`)**:
+  - 컨테이너/로컬 환경: `MONGODB_URI=mongodb://admin:admin123@graphrag_agent_db_mongo:27017/grain_of_sound?authSource=admin`
+  - GCP GCE 사설망 환경: `MONGODB_URI=mongodb://gyeol_app:${DB_PASS}@10.x.x.x:27017/grain_of_sound?authSource=grain_of_sound`
+- **핵심 컬렉션**:
+  1. `performancerequests`: `[공연 신청하기]` 접수 데이터
+  2. `memberapplications`: `[일반회원(단원) 지원]` 접수 데이터
+  3. `supporterinquiries`: `[후원회원 가입 문의]` 1:1 안내 요청 데이터 (**계좌번호/결제정보 필드 일체 없음**)
+  4. `archiveitems`: `[나눔·복지 공연]` 및 `[축제·의전 공연]` 프로그램/갤러리 사진 아카이브
+  5. `siteconfigs`: 단체 기본 정보(단체명, 고유번호, 소재지, 대표자, 연락처, 오픈채팅 URL)
+  6. `adminusers` & `auditlogs`: 운영자 접수 확인 및 감사로그
 
-### 2-3. 일일 자동 백업 파이프라인 (GCS 연동)
-- **백업 주기**: 매일 새벽 03:00 (KST) VM 내부 Cron 실행.
+### 2-3. 일일 자동 백업 파이프라인 (`grain_of_sound`)
+- **백업 주기**: 매일 새벽 03:00 (KST) Cron 실행.
 - **백업 절차**:
   ```bash
-  # 1. 덤프 추출
-  mongodump --uri="mongodb://fsi_app:...@127.0.0.1:27017/fsi_portal?authSource=fsi_portal" --out=/backup/dump_$(date +%Y%m%d)
-  
-  # 2. 압축 및 암호화
-  tar -czf /backup/fsi_db_$(date +%Y%m%d).tar.gz /backup/dump_$(date +%Y%m%d)
-  
+  # 1. grain_of_sound DB 덤프 추출
+  mongodump --uri="${MONGODB_URI:?CRITICAL: MONGODB_URI required}" --out=/backup/dump_$(date +%Y%m%d)
+
+  # 2. 압축 및 아카이빙
+  tar -czf /backup/grain_of_sound_$(date +%Y%m%d).tar.gz /backup/dump_$(date +%Y%m%d)
+
   # 3. GCS 전송
-  gcloud storage cp /backup/fsi_db_$(date +%Y%m%d).tar.gz gs://[진흥원-db-backups]/daily/
-  
-  # 4. 로컬 임시파일 정리
-  rm -rf /backup/dump_* /backup/*.tar.gz
+  gcloud storage cp /backup/grain_of_sound_$(date +%Y%m%d).tar.gz gs://${GCS_BACKUP_BUCKET:?}/daily/
   ```
-- **수명주기 정책(Lifecycle)**: 30일 경과 백업본 자동 삭제, 14일 경과 시 Coldline 스토리지 전환.
-- **복구 리허설**: 주기적인 복구(`mongorestore`) 시뮬레이션을 수행하여 백업 데이터 무결성 검증.
 
 ---
 
 ## 3. 백엔드 개발 및 데이터 무결성 가이드
 
-1. **Mongoose ODM 패턴**:
-   - 싱글톤 커넥션 관리(Next.js HMR 캐싱 대응 `global.mongoose`).
-   - 모든 모델 스키마에 `timestamps: true` 및 Soft Delete(`deletedAt`) 필드 내장.
-2. **NoSQL Injection 방어**:
-   - zod 스키마 검증을 거친 정제된 기본 타입(string, number, boolean)만 쿼리 인자로 주입.
-   - `$where`, `$regex` 등 임의 객체 주입 차단.
-3. **파일 업로드**:
-   - 서버를 거치지 않고 Cloud Storage 서명 URL(Signed URL)을 발급받아 브라우저에서 직접 GCS 업로드.
-   - 확장자 화이트리스트(`pdf`, `hwp`, `hwpx`, `docx`, `xlsx`, `pptx`, `jpg`, `jpeg`, `png`, `webp`) 및 용량(개당 50MB 이내) 엄격 검증.
-4. **환경 변수 `.env` 엄격 관리 및 디폴트 금지**:
-   - `MONGODB_URI`는 반드시 `.env` 파일 또는 GCP Secret Manager로부터 [`src/lib/config/env.ts`](file:///apps/ex_project_InstituteofFutureSmartIndustry/src/lib/config/env.ts)의 `getDatabaseUri()`를 통해 주입받으며, 코드 내에 로컬 IP나 기본 DB명을 하드코딩한 fallback을 일체 허용하지 않는다.
-   - 인프라 및 백업/복구 스크립트([`infra/gcp/`](file:///apps/ex_project_InstituteofFutureSmartIndustry/infra/gcp/))에서도 디폴트 패스워드 작성을 금지하며, 환경변수 누락 시 즉시 중단되는 `${VAR:?error}` 구문을 강제한다.
+1. **Mongoose 싱글톤 커넥션 (`src/lib/db/mongodb.ts`)**:
+   - Next.js HMR 환경에서 커넥션 누수를 방지하기 위해 `global.mongoose` 캐싱 패턴을 적용한다.
+   - 연결 대상 DB가 `grain_of_sound`인지 초기화 로그로 명확히 검증한다.
+2. **NoSQL Injection 및 스팸 방어**:
+   - 모든 3대 액션 폼 입력값은 `zod` 스키마를 통해 정제된 문자열/배열/열거형만 허용한다.
+   - 비로그인 공개 폼의 특성상 **Honeypot 숨김 필드(`_gotcha`)**, **최소 작성 시간 검증**, **IP 기반 Rate Limit(분당 5회)**을 필수로 적용한다.
+3. **환경 변수 `.env` 엄격 관리 및 디폴트 금지 (No-Default Policy)**:
+   - `MONGODB_URI`, `PORT`, `NEXT_PUBLIC_APP_URL`, `SESSION_SECRET` 등은 반드시 `.env` 파일로부터 로드하며, 코드 내에 `|| 'smart_industry'`나 `|| 30013` 같은 과거 프로젝트의 잔재 또는 하드코딩된 폴백을 절대 허용하지 않는다.

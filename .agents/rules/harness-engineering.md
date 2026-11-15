@@ -1,6 +1,6 @@
 # 하네스 엔지니어링 헌장 (Harness Engineering Charter)
 
-이 문서는 Google Antigravity / Gemini 환경에서 **미래스마트산업진흥원 안내 사이트 구축 프로젝트**의 에이전트 팀과 스킬 체계를 구축하고 운영할 때 준수해야 하는 엔지니어링 표준 및 행동 헌장이다.
+이 문서는 Google Antigravity / Gemini 환경에서 **비영리 전통연희단체 「연희단 결 (GYEOL : The Grain of Sound)」 공식 웹페이지 구축 프로젝트**(`docs/PRDs/gyeol.md`)의 에이전트 팀과 스킬 체계를 구축하고 운영할 때 준수해야 하는 엔지니어링 표준 및 행동 헌장이다.
 
 ---
 
@@ -8,14 +8,14 @@
 
 ### 1-1. 단일 프롬프트의 한계와 하네스의 필요성
 - LLM에 복잡하고 긴 지시를 단일 프롬프트로 전달할 경우, **주의력 분산(Attention Dilution)**, **컨텍스트 오염(Context Poisoning)**, **환각(Hallucination)**이 발생한다.
-- **하네스(Harness)**는 AI 에이전트가 복잡한 소프트웨어 엔지니어링 및 도메인 작업을 수행할 수 있도록 감싸는 **신뢰 레이어(Trust Layer)**이자 **시스템 인프라**다.
+- **하네스(Harness)**는 AI 에이전트가 브랜드 디자인 감도, 법적 가드레일(후원 계좌 노출 금지), 모바일 인앱 최적화(`100dvh`), 데이터베이스(`grain_of_sound`) 무결성을 흔들림 없이 달성하도록 감싸는 **신뢰 레이어(Trust Layer)**이자 **시스템 인프라**다.
 - 작업의 성격에 따라 역할을 세분화하고, 에이전트에게는 **"누가 일하는가(Who/Role)"**를, 스킬에는 **"그 일을 어떻게 하는가(How/Procedure)"**를 명확히 분리한다.
 
 ### 1-2. 핵심 목표
-1. **결정론적 품질 보장**: "그럴듯하지만 틀린" 산출물을 시스템 수준의 검증 루프로 걸러낸다.
-2. **효율적 컨텍스트 활용**: 점진적 공개(Progressive Disclosure)를 통해 필요한 순간에만 지식을 로드한다.
+1. **결정론적 품질 보장**: "그럴듯하지만 요구사항이나 법적 기준을 어긴" 산출물을 시스템 수준의 검증 루프로 걸러낸다.
+2. **효율적 컨텍스트 활용**: 점진적 공개(Progressive Disclosure)를 통해 필요한 순간에만 도메인 지식과 스킬을 로드한다.
 3. **지속적 진화(Evolution)**: 실행 과정의 실패와 피드백을 기록하여 다음 실행의 기본 품질을 점진적으로 향상시킨다.
-4. **원자적 상태 영속화 (Git Commit)**: 유의미한 작업 단위 완료 시 반드시 Git Commit을 수행하여 상태를 디스크에 보존한다.
+4. **원자적 상태 영속화 (Git Commit)**: 유의미한 작업 단위(WBS G-01 ~ G-12) 완료 시 반드시 Git Commit을 수행하여 상태를 디스크에 보존한다.
 
 ---
 
@@ -24,9 +24,9 @@
 | 패턴 | 구조 | 제어 흐름 특성 | Antigravity 최적 실행 모드 |
 | :--- | :--- | :--- | :--- |
 | **1. 파이프라인 (Pipeline)** | `A → B → C → D` | 순차 의존적, 단계별 산출물이 다음 단계의 입력이 됨 | 순차 백그라운드 태스크 또는 스텝별 오케스트레이션 |
-| **2. 분산·통합 (Fan-out / Fan-in)** | `입력 → {A, B, C} → 통합` | 독립 작업의 병렬 처리 후 최종 집계 | 병렬 백그라운드 실행 후 통합 취합 |
-| **3. 전문가 풀 (Expert Pool)** | `분류기 → 적합 전문가 선택` | 입력 조건/도메인에 따른 동적 라우팅 | 온디맨드 스킬 로드 및 전문가 프롬프트 호출 |
-| **4. 생성·검증 (Producer-Reviewer)** | `생성 ⇄ 검증 (피드백 루프)` | 객관적 기준에 따른 반복 개선 (최대 2~3회) | 적대적 검증자 분리 및 교차 검토 |
+| **2. 분산·통합 (Fan-out / Fan-in)** | `입력 → {A, B, C} → 통합` | 독립 작업(섹션 UI, 모달 폼, API)의 병렬 처리 후 최종 집계 | 병렬 서브에이전트/워크플로우 실행 후 통합 취합 |
+| **3. 전문가 풀 (Expert Pool)** | `분류기 → 적합 전문가 선택` | 입력 조건/도메인에 따른 동적 라우팅 | 온디맨드 스킬 로드(`gyeol-editorial-ui`, `gyeol-action-forms`) |
+| **4. 생성·검증 (Producer-Reviewer)** | `생성 ⇄ 검증 (피드백 루프)` | 객관적 기준(PRD §6 QA 체크리스트)에 따른 반복 개선 | 적대적 검증자(QA & Legal/UX Critic) 분리 및 교차 검토 |
 | **5. 감독자 (Supervisor)** | `감독자 ⇄ 작업자 풀 (동적 배분)` | 동적 작업 큐, 상태 추적 및 재할당 | 지속 세션 오케스트레이터 및 작업 관리 |
 | **6. 계층형 위임 (Hierarchical)** | `상위 에이전트 → 하위 팀 (최대 2단계)` | 복합 프로젝트의 하향식 재귀 분할 | 도메인별 리더 에이전트와 서브태스크 분리 |
 
@@ -34,15 +34,20 @@
 
 ## 3. 5대 품질 검증 패턴 (Workflow-Native Quality Patterns)
 
-1. **적대적 검증 (Adversarial Verification)**: Playwright E2E 네트워크 감시를 통해 외부 LLM API 트래픽 0건 입증.
-2. **심사위원단 (Judge Panels)**: 중요한 아키텍처 설계(VPC 서브넷, 백업 주기, 해싱 알고리즘)에 대해 다면 비교 심사.
-3. **Loop-until-dry (발견 0건 수렴 루프)**: KWCAG 2.2 웹 접근성 결함 및 린트/타입 에러가 0건이 될 때까지 반복 개선.
-4. **다각 스윕 (Multi-angle Sweeps)**: 보안(NoSQL/XSS/세션), 성능(Lighthouse 90+), 모바일 반응형, 도메인 가드레일 다각도 병렬 점검.
-5. **누락 검토자 (Completeness Critic)**: WBS(T-01 ~ T-25) 항목 대비 누락 요소만을 집중 검토.
+1. **적대적 법적·가드레일 검증 (Adversarial Legal Verification)**:
+   - DOM 및 소스코드 전수 스캔을 통해 **후원 계좌번호, 직접 후원 결제 버튼, 일반회원 로그인/회원가입 UI, 내부 연습 일정 게시판**이 0건임을 기계적으로 입증.
+2. **심사위원단 (Judge Panels)**:
+   - Frederic Forest 레퍼런스 기반의 한지(`#F6F3EC`)·먹색(`#1A1917`)·고목(`#4A3525`) 타이포그래피 조화 및 여백(`padding: 64px 20px`), `1px solid #D8D0C5` 먹선 디자인 감도를 다면 심사.
+3. **Loop-until-dry (발견 0건 수렴 루프)**:
+   - TypeScript 정적 타입 에러, 빌드 에러, 웹 접근성 결함, 모바일(375px) Sticky Bottom CTA 가림 현상이 0건이 될 때까지 반복 개선.
+4. **다각 스윕 (Multi-angle Sweeps)**:
+   - 카카오톡 OG 메타태그(`1200x630`), `100dvh` 인앱 뷰포트, 3대 모달 폼 제출(`grain_of_sound` DB 적재) + 카카오톡 오픈채팅 연결, WebP 1.5초 렌더링을 병렬 점검.
+5. **누락 검토자 (Completeness Critic)**:
+   - `docs/PRDs/gyeol.md`의 5개 스토리텔링 섹션, 3대 액션 모달의 모든 입력 필드 및 안내 문구, WBS(G-01 ~ G-12) 대비 누락 요소를 집중 검토.
 
 ---
 
 ## 4. 업무 지시 및 가드레일 준수 원칙
 
-- 에이전트는 `docs/작업지시서.md`에 명시된 기술 스택(Next.js App Router, GCE 자체운영 MongoDB, On-Device 의미검색) 및 범위 제외 사항(챗봇 제외, 신청 기능 제외)을 철저히 준수한다.
-- 모든 에이전트는 각 단위 마일스톤 또는 세부 작업 완료 시 [.agents/rules/git-workflow.md](file:///apps/ex_project_InstituteofFutureSmartIndustry/.agents/rules/git-workflow.md)에 따라 **Git Commit을 반드시 수행**한다.
+- 모든 에이전트는 [`docs/PRDs/gyeol.md`](file:///apps/ex_project_GrainofSound/docs/PRDs/gyeol.md)에 명시된 디자인 토큰, 5단계 원페이지 IA, 3대 액션 폼 규격과 인프라 변경 사항(**`https://neptune.axfoundly.com`**, Port **`30030`**, DB **`grain_of_sound`**)을 철저히 준수한다.
+- 모든 에이전트는 각 단위 마일스톤 또는 세부 작업 완료 시 [.agents/rules/git-workflow.md](file:///apps/ex_project_GrainofSound/.agents/rules/git-workflow.md)에 따라 **Git Commit을 반드시 수행**한다.

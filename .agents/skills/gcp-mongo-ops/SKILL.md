@@ -1,76 +1,62 @@
 ---
 name: gcp-mongo-ops
-description: "GCP 인프라 프로비저닝 및 GCE 자체 운영 MongoDB 구축·운영 스킬. GCP VPC 네트워크, Serverless VPC Access 커넥터 설정, GCE VM MongoDB 설치, No Public IP 보안 격리, SCRAM-SHA-256 인증, 일일 자동 mongodump 백업(GCS 연동) 및 복구(restore) 리허설 수행 시 사용한다."
+description: "연희단 결(GYEOL) 인프라 프로비저닝, https://neptune.axfoundly.com (Port 30030) 배포 및 자체 운영 MongoDB(grain_of_sound) 구축·운영 스킬. GCE VM/컨테이너 MongoDB(grain_of_sound) 설정, No Public IP 보안 격리, SCRAM-SHA-256 인증, 일일 자동 mongodump 백업(GCS 연동) 및 복구(restore) 리허설 수행 시 사용한다."
 ---
 
-# GCP 인프라 & GCE MongoDB 자체 운영 스킬
+# 인프라(`https://neptune.axfoundly.com`, Port `30030`) & MongoDB(`grain_of_sound`) 운영 스킬
 
-미래스마트산업진흥원 포털의 백엔드 데이터베이스를 GCP Compute Engine VM에 자체 구축하고, 안전한 사설망 통신 및 자동 백업 체계를 운영하는 절차입니다.
+비영리 전통연희단체 「연희단 결 (GYEOL : The Grain of Sound)」 공식 웹페이지(`https://neptune.axfoundly.com`, Port `30030`)의 백엔드 데이터베이스(`grain_of_sound`)를 자체 구축·운영하고, 안전한 사설망 통신 및 자동 백업 체계를 관리하는 절차다.
 
 ---
 
-## 1. GCE VM MongoDB 자체 구축 절차 (WBS T-03)
+## 1. MongoDB `grain_of_sound` 자체 구축 및 계정 절차
 
-### 1-1. VM 인스턴스 사양 및 네트워크
-- **리전/존**: `asia-northeast3-a` (서울)
-- **머신 타입**: `e2-standard-2` (2 vCPU, 8GB RAM)
-- **OS**: Ubuntu 24.04 LTS
-- **디스크**: Balanced SSD 50GB~100GB 마운트 (`/var/lib/mongodb`)
-- **공인 IP**: **미할당 (`--no-address`)**
-- **서브넷**: `fsi-internal-subnet` (10.10.0.0/24)
+### 1-1. 데이터베이스 및 네트워크 사양
+- **서비스 도메인**: `https://neptune.axfoundly.com`
+- **애플리케이션 바인딩 포트**: `30030` (디버그 포트: `30031`)
+- **대상 데이터베이스명**: **`grain_of_sound`**
+- **컨테이너/로컬 접속 URI (`.env`)**:
+  `MONGODB_URI=mongodb://admin:admin123@graphrag_agent_db_mongo:27017/grain_of_sound?authSource=admin`
+- **운영 GCE VM 사설망**: 공인 IP 미할당 (`--no-address`), 내부 포트 `27017`
 
-### 1-2. MongoDB 설치 및 보안 설정
+### 1-2. MongoDB 유저 및 `grain_of_sound` DB 초기화
 ```bash
-# 1. MongoDB 7.0 / 8.0 설치
-sudo apt update && sudo apt install -y mongodb-org
-
-# 2. 관리자 및 애플리케이션 유저 생성
 mongosh <<EOF
 use admin
 db.createUser({
-  user: "fsi_admin",
-  pwd: "STRONG_ADMIN_PASSWORD_FROM_SECRET_MANAGER",
+  user: "gyeol_admin",
+  pwd: "STRONG_ADMIN_PASSWORD_FROM_ENV",
   roles: [ { role: "userAdminAnyDatabase", db: "admin" }, { role: "readWriteAnyDatabase", db: "admin" } ]
 })
 
-use fsi_portal
+use grain_of_sound
 db.createUser({
-  user: "fsi_app",
-  pwd: "STRONG_APP_PASSWORD_FROM_SECRET_MANAGER",
-  roles: [ { role: "readWrite", db: "fsi_portal" } ]
+  user: "gyeol_app",
+  pwd: "STRONG_APP_PASSWORD_FROM_ENV",
+  roles: [ { role: "readWrite", db: "grain_of_sound" } ]
 })
 EOF
-
-# 3. mongod.conf 설정
-# bindIp: 127.0.0.1, 10.10.0.X (VM 내부 사설 IP)
-# security:
-#   authorization: enabled
-sudo systemctl restart mongod
 ```
 
 ---
 
-## 2. Serverless VPC Access 커넥터 연동 (WBS T-02)
+## 2. 서비스 기동 및 포트(`30030`) 바인딩
 
-1. **커넥터 생성**:
+1. **로컬 및 컨테이너 기동 (`run_port.sh`)**:
    ```bash
-   gcloud compute networks vpc-access connectors create fsi-vpc-connector \
-     --region=asia-northeast3 \
-     --range=10.8.0.0/28 \
-     --network=fsi-vpc
+   # 개발 모드 기동 (Port 30030)
+   ./run_port.sh dev
+
+   # 프로덕션 빌드 및 기동 (Port 30030)
+   ./run_port.sh prod
    ```
-2. **Cloud Run 서비스 연결**:
-   ```bash
-   gcloud run deploy fsi-portal-web \
-     --image=asia-northeast3-docker.pkg.dev/.../fsi-web:latest \
-     --vpc-connector=fsi-vpc-connector \
-     --vpc-egress=private-ranges-only \
-     --set-env-vars=MONGODB_URI="mongodb://fsi_app:PW@10.10.0.X:27017/fsi_portal?authSource=fsi_portal"
-   ```
+2. **Cloud Run / 리버스 프록시 배포 (`https://neptune.axfoundly.com`)**:
+   - 외부 HTTPS(`443`) 트래픽을 내부 컨테이너 포트 `30030`으로 라우팅한다.
+   - 환경 변수 `PORT=30030`, `NEXT_PUBLIC_APP_URL=https://neptune.axfoundly.com`, `BASE_URL=https://neptune.axfoundly.com`, `MONGODB_URI`를 주입한다.
 
 ---
 
-## 3. 일일 자동 백업 및 복구 파이프라인 (WBS T-04)
+## 3. 일일 자동 백업 및 복구 파이프라인 (`grain_of_sound`)
 
 ### 3-1. 백업 스크립트 (`/opt/scripts/backup_mongo.sh`)
 ```bash
@@ -79,26 +65,26 @@ set -euo pipefail
 
 DATE=$(date +%Y%m%d_%H%M%S)
 BACKUP_DIR="/var/backups/mongodb"
-BUCKET="gs://fsi-db-backups-asia-northeast3/daily"
+BUCKET="gs://${GCS_BACKUP_BUCKET:?}/daily"
 
 mkdir -p "$BACKUP_DIR"
 
-# 1. 덤프 생성
-mongodump --uri="mongodb://fsi_admin:${DB_PASS}@127.0.0.1:27017/fsi_portal?authSource=admin" --out="${BACKUP_DIR}/dump_${DATE}"
+# 1. grain_of_sound 덤프 생성
+mongodump --uri="${MONGODB_URI:?CRITICAL: MONGODB_URI is required}" --out="${BACKUP_DIR}/dump_${DATE}"
 
 # 2. 압축
-tar -czf "${BACKUP_DIR}/fsi_dump_${DATE}.tar.gz" -C "${BACKUP_DIR}" "dump_${DATE}"
+tar -czf "${BACKUP_DIR}/grain_of_sound_dump_${DATE}.tar.gz" -C "${BACKUP_DIR}" "dump_${DATE}"
 
 # 3. Cloud Storage 업로드
-gcloud storage cp "${BACKUP_DIR}/fsi_dump_${DATE}.tar.gz" "${BUCKET}/"
+gcloud storage cp "${BACKUP_DIR}/grain_of_sound_dump_${DATE}.tar.gz" "${BUCKET}/"
 
 # 4. 임시 파일 정리
-rm -rf "${BACKUP_DIR}/dump_${DATE}" "${BACKUP_DIR}/fsi_dump_${DATE}.tar.gz"
+rm -rf "${BACKUP_DIR}/dump_${DATE}" "${BACKUP_DIR}/grain_of_sound_dump_${DATE}.tar.gz"
 ```
 - Crontab 등록: `0 3 * * * /opt/scripts/backup_mongo.sh >> /var/log/mongo_backup.log 2>&1`
 
 ### 3-2. 복구(Restore) 리허설 절차
-1. 최신 백업 아카이브 다운로드: `gcloud storage cp gs://.../daily/fsi_dump_YYYYMMDD.tar.gz .`
+1. 최신 백업 아카이브 다운로드: `gcloud storage cp gs://.../daily/grain_of_sound_dump_YYYYMMDD.tar.gz .`
 2. 압축 해제 및 복구 명령:
-   `mongorestore --uri="mongodb://fsi_admin:${DB_PASS}@127.0.0.1:27017/?authSource=admin" --drop ./dump_YYYYMMDD/`
-3. 데이터 건수 및 컬렉션 정합성 검증 확인서 작성.
+   `mongorestore --uri="${MONGODB_URI:?}" --drop ./dump_YYYYMMDD/`
+3. `grain_of_sound` 내 4대 컬렉션(`performancerequests`, `memberapplications`, `supporterinquiries`, `archiveitems`) 정합성 검증.

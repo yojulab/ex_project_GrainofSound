@@ -7,7 +7,7 @@
 
 set -euo pipefail
 
-TASK="${1:-"eCare24 LMS 기능 구현 및 테스트 검증"}"
+TASK="${1:-"연희단 결(GYEOL) 공식 웹페이지 구현 및 QA 체크리스트 검증"}"
 MAX_ITERATIONS="${2:-10}"
 PROMISE="${3:-"PROMISE_MET: COMPLETED"}"
 

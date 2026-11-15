@@ -1,24 +1,24 @@
 {
   "name": "harness",
-  "version": "3.0.0-gemini",
-  "description": "Harness Engineering & Multi-Agent Architecture for Future Smart Industry Institute Portal (Next.js App Router, GCE MongoDB Self-Hosted, On-Device Search, Admin CMS, GCP Cloud Run)",
+  "version": "1.0.0-gyeol",
+  "description": "Harness Engineering & Multi-Agent Architecture for GYEOL : The Grain of Sound (연희단 결) Official Website (https://neptune.axfoundly.com, Port 30030, MongoDB grain_of_sound, Korean Traditional Hanji-Ink Editorial Design, 3 Action Forms & Kakao In-App Optimization)",
   "author": "Antigravity & Gemini Team",
   "entrypoint": "skills/harness/SKILL.md",
   "skills": [
     "harness",
     "harness-evolve",
     "ralph-loop",
-    "smart-industry-cms",
-    "on-device-search",
+    "gyeol-editorial-ui",
+    "gyeol-action-forms",
     "gcp-mongo-ops"
   ],
   "rules": [
     "rules/harness-engineering.md",
     "rules/loop-engineering.md",
-    "rules/smart-industry-domain.md",
+    "rules/gyeol-domain.md",
     "rules/architecture-mongodb-gcp.md",
-    "rules/on-device-search.md",
     "rules/admin-security.md",
+    "rules/ui-tagging-inspection.md",
     "rules/git-workflow.md"
   ]
 }
