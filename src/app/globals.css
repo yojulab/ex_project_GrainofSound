@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+:root {
+  --bg-hanji: #F6F3EC;
+  --bg-wood-beige: #EAE4D7;
+  --text-ink: #1A1917;
+  --text-muted-ink: #5C564F;
+  --accent-wood: #4A3525;
+  --accent-seal: #A63A2B;
+  --line-hairline: #D8D0C5;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--bg-hanji);
+    color: var(--text-ink);
+    font-size: 16px;
+  }
+
+  body {
+    background-color: var(--bg-hanji);
+    color: var(--text-ink);
+    font-family: var(--font-sans-kr), "Pretendard", -apple-system, BlinkMacSystemFont,
+      "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    font-size: 1rem;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+}
+
+/* 미세 한지 질감 노이즈 오버레이 (투명도 4%) */
+.hanji-grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='hanjiNoise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23hanjiNoise)'/%3E%3C/svg%3E");
+}
+
+/* 타이포그래피 유틸리티 */
+.font-serif-en {
+  font-family: var(--font-serif-en), "Cormorant Garamond", Georgia, serif;
+}
+
+.font-serif-kr {
+  font-family: var(--font-serif-kr), "Noto Serif KR", Georgia, serif;
+}
+
+.font-sans-kr {
+  font-family: var(--font-sans-kr), "Pretendard", sans-serif;
+}
+
+/* 얇은 먹선 구분선 및 에디토리얼 섹션 패딩 */
+.gyeol-divider {
+  border-top: 1px solid var(--line-hairline);
+}
+
+.gyeol-section {
+  padding: 64px 20px;
+}
+
+@media (min-width: 768px) {
+  .gyeol-section {
+    padding: 96px 32px;
+  }
+}
+
+/* 절제된 Fade-up 모션 (0.6s) */
+@keyframes gyeolFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up-hidden {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.fade-up-visible {
+  animation: gyeolFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-up-hidden,
+  .fade-up-visible {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+}
+
+/* 스크롤 인디케이터 수직선 애니메이션 */
+@keyframes scrollLinePulse {
+  0%, 100% {
+    transform: scaleY(0.45);
+    opacity: 0.45;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+.scroll-line-anim {
+  transform-origin: top;
+  animation: scrollLinePulse 2.2s ease-in-out infinite;
+}
