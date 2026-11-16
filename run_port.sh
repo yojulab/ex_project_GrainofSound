@@ -239,17 +239,22 @@ cmd_start() {
     echo -e "   ${GREEN}✓ MongoDB (${db_host}:${db_port} / DB: ${db_name}) 연결 확인 완료${NC}"
   fi
 
+  local next_bin="${PROJECT_DIR}/node_modules/.bin/next"
+  if [ ! -x "$next_bin" ]; then
+    next_bin="npx next"
+  fi
+
   if [ "$mode" = "debug" ]; then
-    nohup env PORT="$p" HOSTNAME="$DEFAULT_HOST" NODE_OPTIONS="--inspect=0.0.0.0:${INSPECT_PORT}" npx next dev -H "$DEFAULT_HOST" -p "$p" > "$LOG_FILE" 2>&1 &
+    (cd "${PROJECT_DIR}" && nohup env PORT="$p" HOSTNAME="$DEFAULT_HOST" NODE_OPTIONS="--inspect=0.0.0.0:${INSPECT_PORT}" $next_bin dev -H "$DEFAULT_HOST" -p "$p" > "$LOG_FILE" 2>&1 &)
   elif [ "$mode" = "dev" ]; then
-    nohup env PORT="$p" HOSTNAME="$DEFAULT_HOST" npx next dev -H "$DEFAULT_HOST" -p "$p" > "$LOG_FILE" 2>&1 &
+    (cd "${PROJECT_DIR}" && nohup env PORT="$p" HOSTNAME="$DEFAULT_HOST" $next_bin dev -H "$DEFAULT_HOST" -p "$p" > "$LOG_FILE" 2>&1 &)
   else
     # prod (운영 모드)
     if [ ! -f "${PROJECT_DIR}/.next/BUILD_ID" ]; then
       echo -e "   ${YELLOW}📦 프로덕션 빌드 부재 감지. 빌드 자동 수행 중...${NC}"
       cmd_compile || return 1
     fi
-    nohup env PORT="$p" HOSTNAME="$DEFAULT_HOST" npx next start -H "$DEFAULT_HOST" -p "$p" > "$LOG_FILE" 2>&1 &
+    (cd "${PROJECT_DIR}" && nohup env PORT="$p" HOSTNAME="$DEFAULT_HOST" $next_bin start -H "$DEFAULT_HOST" -p "$p" > "$LOG_FILE" 2>&1 &)
   fi
 
   for i in {1..8}; do
