@@ -1,3 +1,7 @@
+"use client";
+
+import { useLanguage } from "@/lib/i18n/LanguageContext";
+
 export interface FooterSiteInfo {
   organizationName: string;
   legalDesignation: string;
@@ -9,6 +13,19 @@ export interface FooterSiteInfo {
 }
 
 export function Footer({ siteInfo }: { siteInfo: FooterSiteInfo }) {
+  const { language, t } = useLanguage();
+
+  const displayOrgName =
+    language === "fr" ? t.common.siteTitle : siteInfo.organizationName;
+  const displayLegalDesignation =
+    language === "fr"
+      ? "Association à but non lucratif enregistrée sous n° unique"
+      : siteInfo.legalDesignation;
+  const displayLocation =
+    language === "fr" ? "Bucheon-si, Gyeonggi-do, Corée du Sud" : siteInfo.location;
+  const displayRepName =
+    language === "fr" ? "Yeon-hee Kim" : siteInfo.representativeName;
+
   return (
     <footer
       data-serial-id="G00-FTR-SEC01"
@@ -27,11 +44,11 @@ export function Footer({ siteInfo }: { siteInfo: FooterSiteInfo }) {
                 結
               </span>
               <p className="font-serif-kr text-lg font-semibold text-[#262523]">
-                {siteInfo.organizationName}
+                {displayOrgName}
               </p>
             </div>
             <p className="mt-1.5 text-sm text-[#5C564F]">
-              {siteInfo.legalDesignation}
+              {displayLegalDesignation}
             </p>
             <p className="font-serif-en mt-1 text-sm italic tracking-wider text-[#5C564F]">
               The Grain of Sound, GYEOL
@@ -40,23 +57,33 @@ export function Footer({ siteInfo }: { siteInfo: FooterSiteInfo }) {
 
           <dl className="grid grid-cols-1 gap-2 text-sm text-[#5C564F] sm:grid-cols-2 sm:gap-x-8 sm:gap-y-2">
             <div>
-              <dt className="inline font-medium text-[#262523]">소재지: </dt>
-              <dd className="inline">{siteInfo.location}</dd>
+              <dt className="inline font-medium text-[#262523]">
+                {t.footer.locationLabel}
+              </dt>
+              <dd className="inline">{displayLocation}</dd>
             </div>
             <div>
-              <dt className="inline font-medium text-[#262523]">대표자: </dt>
-              <dd className="inline">{siteInfo.representativeName}</dd>
+              <dt className="inline font-medium text-[#262523]">
+                {t.footer.representativeLabel}
+              </dt>
+              <dd className="inline">{displayRepName}</dd>
             </div>
             <div>
-              <dt className="inline font-medium text-[#262523]">고유번호: </dt>
+              <dt className="inline font-medium text-[#262523]">
+                {t.footer.registrationNumberLabel}
+              </dt>
               <dd className="inline">{siteInfo.registrationNumber}</dd>
             </div>
             <div>
-              <dt className="inline font-medium text-[#262523]">공식 연락처: </dt>
+              <dt className="inline font-medium text-[#262523]">
+                {t.footer.phoneLabel}
+              </dt>
               <dd className="inline">{siteInfo.contactPhone}</dd>
             </div>
             <div className="sm:col-span-2">
-              <dt className="inline font-medium text-[#262523]">이메일: </dt>
+              <dt className="inline font-medium text-[#262523]">
+                {t.footer.emailLabel}
+              </dt>
               <dd className="inline">
                 <a
                   href={`mailto:${siteInfo.contactEmail}`}
@@ -76,19 +103,16 @@ export function Footer({ siteInfo }: { siteInfo: FooterSiteInfo }) {
           className="mt-8 border-l-2 border-[#A63A2B] bg-[#F9F7F2] p-4 text-xs leading-relaxed text-[#5C564F]"
         >
           <strong className="block text-[#262523] mb-1 font-medium">
-            ※ 비영리임의단체 법적 지위 및 기부금 영수증 미발행 안내
+            {t.footer.legalNoticeTitle}
           </strong>
-          연희단 결은 부천세무서 고유번호증(123-82-45678)을 교부받은 비영리임의단체입니다. 법인세법 및 소득세법상 지정기부금단체가 아니므로, 납부하신 회비·후원금에 대해 세액공제용 기부금 영수증은 발행되지 않습니다. 후원회원 가입 및 회비 안내는 1:1 개별 문의를 통해서만 진행되며, 본 웹사이트에는 계좌번호를 일체 공개하지 않습니다.
+          {t.footer.legalNoticeDesc}
         </div>
 
         <div className="mt-6 border-t border-[#D8D0C5] pt-5 text-xs text-[#5C564F] flex flex-col gap-1.5 sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {new Date().getFullYear()} {siteInfo.organizationName}. All rights
-            reserved.
+            © {new Date().getFullYear()} {displayOrgName}. {t.footer.rights}
           </p>
-          <p>
-            전통예술 보급 및 문화 취약계층 나눔을 실천하는 비영리 예술 공동체
-          </p>
+          <p>{t.footer.subTagline}</p>
         </div>
       </div>
     </footer>

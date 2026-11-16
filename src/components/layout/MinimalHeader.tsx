@@ -1,12 +1,15 @@
 "use client";
 
 import { IdCard } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 interface MinimalHeaderProps {
   onOpenDigitalCard?: () => void;
 }
 
 export function MinimalHeader({ onOpenDigitalCard }: MinimalHeaderProps) {
+  const { language, setLanguage, t } = useLanguage();
+
   return (
     <header
       data-serial-id="G00-HDR-BAR01"
@@ -24,13 +27,13 @@ export function MinimalHeader({ onOpenDigitalCard }: MinimalHeaderProps) {
             結
           </span>
           <span className="font-serif-kr text-sm font-semibold tracking-wide md:text-base">
-            연희단 결
+            {t.common.siteTitle}
           </span>
           <span className="text-[#D8D0C5]" aria-hidden="true">
             |
           </span>
           <span className="font-serif-en text-sm tracking-[0.14em] text-[#5C564F] uppercase">
-            GYEOL
+            {t.common.siteEn}
           </span>
         </a>
 
@@ -38,28 +41,67 @@ export function MinimalHeader({ onOpenDigitalCard }: MinimalHeaderProps) {
           <nav
             data-serial-id="G00-HDR-NAV01"
             data-serial-label="원페이지 섹션 앵커 내비게이션"
-            aria-label="섹션 바로가기"
+            aria-label={t.header.ariaNav}
             className="flex items-center gap-3 text-xs font-medium text-[#5C564F] sm:gap-5 sm:text-sm"
           >
             <a href="#about" className="py-1 transition-colors hover:text-[#262523]">
-              소개
+              {t.header.navAbout}
             </a>
             <a
               href="#repertoire"
               className="py-1 transition-colors hover:text-[#262523]"
             >
-              프로그램
+              {t.header.navRepertoire}
             </a>
             <a href="#join" className="py-1 transition-colors hover:text-[#262523]">
-              함께하기
+              {t.header.navJoin}
             </a>
             <a
               href="#action"
               className="hidden sm:inline-block rounded-sm border border-[#4A3525] px-2.5 py-1 text-[#4A3525] transition-colors hover:bg-[#4A3525] hover:text-[#F9F7F2]"
             >
-              문의·신청
+              {t.header.navAction}
             </a>
           </nav>
+
+          {/* 언어 전환기 (KO | FR) */}
+          <div
+            data-serial-id="G00-HDR-LANG01"
+            data-serial-label="상단 헤더 언어 스위처 (KO | FR)"
+            className="flex items-center gap-1.5 text-xs font-serif-en tracking-wider"
+          >
+            <button
+              type="button"
+              onClick={() => setLanguage("ko")}
+              data-serial-id="G00-HDR-BTN-KO"
+              data-serial-label="한국어 언어 선택 버튼"
+              aria-pressed={language === "ko"}
+              className={
+                language === "ko"
+                  ? "text-[#262523] font-semibold underline underline-offset-4 decoration-1"
+                  : "text-[#7A756D] hover:text-[#262523] transition-colors duration-200"
+              }
+            >
+              KO
+            </button>
+            <span className="text-[#D8D0C5] select-none" aria-hidden="true">
+              |
+            </span>
+            <button
+              type="button"
+              onClick={() => setLanguage("fr")}
+              data-serial-id="G00-HDR-BTN-FR"
+              data-serial-label="프랑스어 언어 선택 버튼"
+              aria-pressed={language === "fr"}
+              className={
+                language === "fr"
+                  ? "text-[#262523] font-semibold underline underline-offset-4 decoration-1"
+                  : "text-[#7A756D] hover:text-[#262523] transition-colors duration-200"
+              }
+            >
+              FR
+            </button>
+          </div>
 
           {onOpenDigitalCard && (
             <button
@@ -70,7 +112,7 @@ export function MinimalHeader({ onOpenDigitalCard }: MinimalHeaderProps) {
               className="flex items-center gap-1.5 rounded-sm border border-[#A63A2B] bg-[#F9F7F2] px-2.5 py-1 text-xs font-semibold text-[#A63A2B] transition-colors hover:bg-[#A63A2B] hover:text-[#F9F7F2]"
             >
               <IdCard className="h-3.5 w-3.5" />
-              <span>디지털 명함</span>
+              <span>{t.header.digitalCard}</span>
             </button>
           )}
         </div>

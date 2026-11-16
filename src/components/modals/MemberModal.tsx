@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { MessageCircle } from "lucide-react";
 import { ModalShell } from "@/components/modals/ModalShell";
 import { formatKoreanPhone } from "@/lib/validations/actions";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 interface MemberModalProps {
   open: boolean;
@@ -11,24 +12,25 @@ interface MemberModalProps {
   kakaoOpenChatUrl: string;
 }
 
-const SPECIALTIES = [
-  { value: "janggu", label: "장구" },
-  { value: "sogo", label: "소고" },
-  { value: "minyo", label: "민요" },
-  { value: "other", label: "기타 전통연희" },
-] as const;
-
-type SpecialtyValue = (typeof SPECIALTIES)[number]["value"];
-
 export function MemberModal({
   open,
   onClose,
   kakaoOpenChatUrl,
 }: MemberModalProps) {
+  const { t } = useLanguage();
+  const m = t.modals.member;
+
+  const SPECIALTIES = [
+    { value: "janggu", label: m.specialtyOptions.janggu },
+    { value: "sogo", label: m.specialtyOptions.sogo },
+    { value: "minyo", label: m.specialtyOptions.minyo },
+    { value: "other", label: m.specialtyOptions.other },
+  ];
+
   const [applicantName, setApplicantName] = useState("");
   const [phone, setPhone] = useState("");
-  const [region, setRegion] = useState("");
-  const [specialties, setSpecialties] = useState<SpecialtyValue[]>(["janggu"]);
+  const [residentialArea, setResidentialArea] = useState("");
+  const [specialties, setSpecialties] = useState<string[]>(["janggu"]);
   const [experienceAndIntro, setExperienceAndIntro] = useState("");
   const [privacyAgreed, setPrivacyAgreed] = useState(false);
   const [honeypot, setHoneypot] = useState("");
@@ -36,9 +38,9 @@ export function MemberModal({
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
-  const toggleSpecialty = (val: SpecialtyValue) => {
+  const toggleSpecialty = (value: string) => {
     setSpecialties((prev) =>
-      prev.includes(val) ? prev.filter((item) => item !== val) : [...prev, val]
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
     );
   };
 
@@ -53,16 +55,17 @@ export function MemberModal({
     setErrorMsg(null);
 
     if (specialties.length === 0) {
-      setErrorMsg("주요 분야를 최소 1개 이상 선택해 주세요.");
+      setErrorMsg(m.specialtyError);
       return;
     }
 
     if (!privacyAgreed) {
-      setErrorMsg("개인정보 수집 및 이용에 동의해 주세요.");
+      setErrorMsg(m.privacyError);
       return;
     }
 
     setSubmitting(true);
+
     try {
       const res = await fetch("/api/actions/member", {
         method: "POST",
@@ -70,7 +73,7 @@ export function MemberModal({
         body: JSON.stringify({
           applicantName,
           phone,
-          region,
+          residentialArea,
           specialties,
           experienceAndIntro,
           privacyAgreed,
@@ -79,26 +82,18 @@ export function MemberModal({
       });
       const data = (await res.json()) as { message?: string; error?: string };
       if (!res.ok) {
-        setErrorMsg(
-          data.error ||
-            "지원서 접수 중 오류가 발생했습니다. 카카오톡 오픈채팅으로 문의해 주세요."
-        );
+        setErrorMsg(data.error || m.errorMessage);
       } else {
-        setSuccessMsg(
-          data.message ||
-            "지원해 주셔서 감사합니다. 담당 단원이 확인 후 기재해 주신 연락처로 연습 일정 및 참관 안내를 드리겠습니다."
-        );
+        setSuccessMsg(data.message || m.successMessage);
         setApplicantName("");
         setPhone("");
-        setRegion("");
+        setResidentialArea("");
         setSpecialties(["janggu"]);
         setExperienceAndIntro("");
         setPrivacyAgreed(false);
       }
     } catch {
-      setErrorMsg(
-        "네트워크 오류가 발생했습니다. 카카오톡 오픈채팅으로 바로 문의해 주세요."
-      );
+      setErrorMsg(m.errorMessage);
     } finally {
       setSubmitting(false);
     }
@@ -108,8 +103,8 @@ export function MemberModal({
     <ModalShell
       open={open}
       onClose={resetAndClose}
-      title="일반회원(단원) 지원"
-      subtitle="M02 · Member Application"
+      title={m.title}
+      subtitle={m.subtitle}
       serialId="M02-FRM-MOD01"
     >
       {successMsg ? (
@@ -122,7 +117,7 @@ export function MemberModal({
             onClick={resetAndClose}
             className="min-h-[48px] w-full rounded-sm bg-[#4A3525] px-5 py-3 text-sm font-semibold text-[#F9F7F2]"
           >
-            확인
+            {t.common.confirm}
           </button>
         </div>
       ) : (
@@ -138,10 +133,10 @@ export function MemberModal({
             aria-hidden="true"
           />
 
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-1.5 block text-sm font-medium text-[#262523]">
-                성함 <span className="text-[#A63A2B]">*</span>
+                {m.applicantNameLabel} <span className="text-[#A63A2B]">*</span>
               </label>
               <input
                 type="text"
@@ -149,14 +144,15 @@ export function MemberModal({
                 value={applicantName}
                 onChange={(e) => setApplicantName(e.target.value)}
                 data-serial-id="M02-FRM-INP01"
-                data-serial-label="단원 지원 - 지원자 성함 입력"
-                placeholder="예: 이연희"
+                data-serial-label="단원 지원 - 지원자 성명 입력"
+                placeholder={m.applicantNamePlaceholder}
                 className="min-h-[46px] w-full border border-[#D8D0C5] bg-[#EFECE4]/45 px-3.5 py-2.5 text-base text-[#262523] placeholder:text-[#5C564F]/65 focus:border-[#4A3525] focus:outline-none"
               />
             </div>
+
             <div>
               <label className="mb-1.5 block text-sm font-medium text-[#262523]">
-                연락처 <span className="text-[#A63A2B]">*</span>
+                {m.applicantPhoneLabel} <span className="text-[#A63A2B]">*</span>
               </label>
               <input
                 type="tel"
@@ -165,7 +161,7 @@ export function MemberModal({
                 onChange={(e) => setPhone(formatKoreanPhone(e.target.value))}
                 data-serial-id="M02-FRM-INP02"
                 data-serial-label="단원 지원 - 연락처 입력"
-                placeholder="010-1234-5678"
+                placeholder={m.applicantPhonePlaceholder}
                 className="min-h-[46px] w-full border border-[#D8D0C5] bg-[#EFECE4]/45 px-3.5 py-2.5 text-base text-[#262523] placeholder:text-[#5C564F]/65 focus:border-[#4A3525] focus:outline-none"
               />
             </div>
@@ -173,24 +169,23 @@ export function MemberModal({
 
           <div>
             <label className="mb-1.5 block text-sm font-medium text-[#262523]">
-              거주 지역 <span className="text-[#A63A2B]">*</span>
+              {m.residentialAreaLabel} <span className="text-[#A63A2B]">*</span>
             </label>
             <input
               type="text"
               required
-              value={region}
-              onChange={(e) => setRegion(e.target.value)}
+              value={residentialArea}
+              onChange={(e) => setResidentialArea(e.target.value)}
               data-serial-id="M02-FRM-INP03"
               data-serial-label="단원 지원 - 거주 지역 입력"
-              placeholder="예: 부천시 소사구, 원미구, 인근 지역 등"
+              placeholder={m.residentialAreaPlaceholder}
               className="min-h-[46px] w-full border border-[#D8D0C5] bg-[#EFECE4]/45 px-3.5 py-2.5 text-base text-[#262523] placeholder:text-[#5C564F]/65 focus:border-[#4A3525] focus:outline-none"
             />
           </div>
 
           <fieldset data-serial-id="M02-FRM-CHK01" data-serial-label="단원 지원 - 주요 분야 복수 선택">
             <legend className="mb-2 block text-sm font-medium text-[#262523]">
-              주요 분야 (복수 선택 가능){" "}
-              <span className="text-[#A63A2B]">*</span>
+              {m.specialtiesLabel} <span className="text-[#A63A2B]">*</span>
             </legend>
             <div className="grid grid-cols-2 gap-2">
               {SPECIALTIES.map((opt) => {
@@ -219,7 +214,7 @@ export function MemberModal({
 
           <div>
             <label className="mb-1.5 block text-sm font-medium text-[#262523]">
-              연주 경력 및 간단한 소개 <span className="text-[#A63A2B]">*</span>
+              {m.experienceLabel} <span className="text-[#A63A2B]">*</span>
             </label>
             <textarea
               rows={3}
@@ -228,7 +223,7 @@ export function MemberModal({
               onChange={(e) => setExperienceAndIntro(e.target.value)}
               data-serial-id="M02-FRM-TXT01"
               data-serial-label="단원 지원 - 연주 경력 및 소개 입력"
-              placeholder="동호회 활동, 강습 이력, 함께하고 싶은 마음 등을 자유롭게 적어주세요."
+              placeholder={m.experiencePlaceholder}
               className="w-full border border-[#D8D0C5] bg-[#EFECE4]/45 px-3.5 py-2.5 text-base text-[#262523] placeholder:text-[#5C564F]/65 focus:border-[#4A3525] focus:outline-none"
             />
           </div>
@@ -248,8 +243,10 @@ export function MemberModal({
                 className="mt-0.5 accent-[#A63A2B]"
               />
               <span>
-                <strong className="text-[#262523]">[필수] 개인정보 수집 및 이용 동의:</strong>{" "}
-                단원 지원 접수 및 오디션/참관 안내를 위해 성함, 연락처, 거주지, 경력 사항을 수집하며, 선발 전형 완료 시까지 안전하게 보관됩니다.
+                <strong className="text-[#262523]">
+                  {m.privacyAgreedTitle}
+                </strong>{" "}
+                {m.privacyAgreedText}
               </span>
             </label>
           </div>
@@ -268,7 +265,7 @@ export function MemberModal({
               data-serial-label="단원 지원 - 제출 버튼"
               className="min-h-[48px] w-full rounded-sm bg-[#4A3525] px-5 py-3 text-sm font-semibold text-[#F9F7F2] transition-colors hover:bg-[#38271B] disabled:opacity-60"
             >
-              {submitting ? "지원서 접수 중..." : "단원 지원서 제출하기"}
+              {submitting ? t.common.submitPending : m.submitButton}
             </button>
 
             <a
@@ -280,7 +277,7 @@ export function MemberModal({
               className="flex min-h-[48px] w-full items-center justify-center gap-2 rounded-sm border border-[#262523] bg-[#F9F7F2] px-5 py-3 text-sm font-semibold text-[#262523] transition-colors hover:bg-[#EFECE4]"
             >
               <MessageCircle className="h-4 w-4" />
-              <span>카카오톡 오픈채팅으로 문의하기</span>
+              <span>{m.kakaoButton}</span>
             </a>
           </div>
         </form>

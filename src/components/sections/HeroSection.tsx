@@ -1,6 +1,11 @@
+"use client";
+
 import Image from "next/image";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 export function HeroSection() {
+  const { t } = useLanguage();
+
   return (
     <section
       id="hero"
@@ -27,8 +32,8 @@ export function HeroSection() {
 
       {/* 상단 에디토리얼 메타 라인 */}
       <div className="relative z-10 flex w-full max-w-4xl items-center justify-between border-b border-[#D8D0C5] pb-3 text-xs tracking-[0.18em] text-[#5C564F] uppercase">
-        <span>BUCHEON · NON-PROFIT TRADITIONAL ARTS</span>
-        <span className="font-serif-kr">연희단 결</span>
+        <span>{t.hero.metaLine}</span>
+        <span className="font-serif-kr">{t.hero.metaName}</span>
       </div>
 
       {/* 중앙 메인 타이틀 & 장구·소고 먹선 드로잉 */}
@@ -69,7 +74,7 @@ export function HeroSection() {
 
         <p className="mb-3 inline-flex items-center gap-2 text-xs font-medium tracking-[0.22em] text-[#A63A2B] uppercase">
           <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#A63A2B]" />
-          GYEOL : THE GRAIN OF SOUND
+          {t.hero.badge}
         </p>
 
         <h1
@@ -77,9 +82,9 @@ export function HeroSection() {
           data-serial-label="Hero 메인 영문 슬로건 (The Grain of Sound, GYEOL)"
           className="font-serif-en text-4xl font-normal leading-[1.12] tracking-tight text-[#262523] sm:text-5xl md:text-6xl"
         >
-          The Grain of Sound,
+          {t.hero.titleMain}
           <br />
-          <span className="italic text-[#4A3525]">GYEOL</span>
+          <span className="italic text-[#4A3525]">{t.hero.titleSub}</span>
         </h1>
 
         <p
@@ -87,12 +92,11 @@ export function HeroSection() {
           data-serial-label="Hero 국문 서브 카피"
           className="font-serif-kr mt-6 max-w-xl text-base leading-[1.75] text-[#262523] sm:text-lg"
         >
-          나무와 가죽, 사람의 숨결이 빚어내는 우리 소리의 결
+          {t.hero.slogan}
         </p>
 
         <p className="mt-3 max-w-md text-sm leading-relaxed text-[#5C564F] sm:text-base">
-          부천을 거점으로 전통연희의 울림을 이웃과 세계에 나누는 비영리 예술
-          공동체 연희단 결입니다.
+          {t.hero.description}
         </p>
       </div>
 
@@ -103,7 +107,7 @@ export function HeroSection() {
         data-serial-label="Hero 하단 스크롤 유도 인디케이터"
         className="relative z-10 flex flex-col items-center gap-2 text-[11px] tracking-[0.22em] text-[#5C564F] uppercase transition-colors hover:text-[#262523]"
       >
-        <span>Scroll to Explore</span>
+        <span>{t.hero.scrollIndicator}</span>
         <span className="scroll-line-anim h-8 w-px bg-[#4A3525]" />
       </a>
     </section>

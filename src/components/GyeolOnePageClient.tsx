@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { LanguageProvider } from "@/lib/i18n/LanguageContext";
 import { MinimalHeader } from "@/components/layout/MinimalHeader";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { AboutSection } from "@/components/sections/AboutSection";
@@ -24,7 +25,7 @@ interface GyeolOnePageClientProps {
   archiveItems: ArchiveItemView[];
 }
 
-export function GyeolOnePageClient({
+function GyeolOnePageInner({
   siteInfo,
   kakaoOpenChatUrl,
   archiveItems,
@@ -78,5 +79,13 @@ export function GyeolOnePageClient({
         siteInfo={siteInfo}
       />
     </div>
+  );
+}
+
+export function GyeolOnePageClient(props: GyeolOnePageClientProps) {
+  return (
+    <LanguageProvider>
+      <GyeolOnePageInner {...props} />
+    </LanguageProvider>
   );
 }

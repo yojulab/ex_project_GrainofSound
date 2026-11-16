@@ -1,4 +1,7 @@
+"use client";
+
 import { FadeUp } from "@/components/motion/FadeUp";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 interface JoinUsSectionProps {
   onOpenMemberModal: () => void;
@@ -9,6 +12,8 @@ export function JoinUsSection({
   onOpenMemberModal,
   onOpenSupporterModal,
 }: JoinUsSectionProps) {
+  const { t } = useLanguage();
+
   return (
     <section
       id="join"
@@ -19,15 +24,13 @@ export function JoinUsSection({
       <FadeUp>
         <div className="mb-10">
           <p className="font-serif-en text-sm tracking-[0.2em] text-[#A63A2B] uppercase">
-            04 · Join Us
+            {t.joinUs.sectionNum}
           </p>
           <h2 className="font-serif-kr mt-2 text-2xl font-semibold text-[#262523] sm:text-3xl">
-            소리의 결을 함께 빚어가는 길
+            {t.joinUs.title}
           </h2>
           <p className="mt-3 max-w-2xl text-base leading-[1.7] text-[#5C564F]">
-            무대 위에서 함께 장단을 맞추는 연주 단원부터, 전통문화 나눔의 뜻에
-            마음을 보태주시는 후원회원(서포터즈)까지 모두 연희단 결의 소중한
-            구성원입니다.
+            {t.joinUs.description}
           </p>
         </div>
       </FadeUp>
@@ -42,22 +45,18 @@ export function JoinUsSection({
           >
             <div>
               <p className="font-serif-en text-xs tracking-[0.18em] text-[#4A3525] uppercase">
-                PERFORMING MEMBER
+                {t.joinUs.memberCard.subtitle}
               </p>
               <h3 className="font-serif-kr mt-1.5 text-xl font-semibold text-[#262523]">
-                일반단원 모집 안내
+                {t.joinUs.memberCard.title}
               </h3>
               <p className="mt-3 text-base leading-[1.7] text-[#5C564F]">
-                경기도 부천시 및 인근 지역(인천·서울 서부 등) 거주자 중{" "}
-                <strong className="font-semibold text-[#262523]">
-                  장구 · 소고 · 민요
-                </strong>{" "}
-                등 전통연희 유경험자 분들을 환영합니다.
+                {t.joinUs.memberCard.description}
               </p>
               <ul className="mt-4 space-y-2 border-t border-[#D8D0C5] pt-4 text-sm leading-relaxed text-[#5C564F] sm:text-base">
-                <li>• 활동 거점: 경기도 부천시 연습실 (정기 합주 및 참관 가능)</li>
-                <li>• 연습 분위기: 서로의 호흡을 존중하며 즐겁게 기량을 나누는 공동체</li>
-                <li>• 주요 활동: 부천 관내 복지기관 나눔 공연 및 지역 축제 무대 참여</li>
+                {t.joinUs.memberCard.points.map((pt, i) => (
+                  <li key={i}>• {pt}</li>
+                ))}
               </ul>
             </div>
 
@@ -67,7 +66,7 @@ export function JoinUsSection({
                 onClick={onOpenMemberModal}
                 className="min-h-[48px] w-full rounded-sm border border-[#4A3525] bg-[#F9F7F2] px-5 py-3 text-sm font-semibold text-[#4A3525] transition-colors hover:bg-[#4A3525] hover:text-[#F9F7F2]"
               >
-                일반회원(단원) 지원하기
+                {t.joinUs.memberCard.button}
               </button>
             </div>
           </article>
@@ -82,22 +81,18 @@ export function JoinUsSection({
           >
             <div>
               <p className="font-serif-en text-xs tracking-[0.18em] text-[#A63A2B] uppercase">
-                SUPPORTERS
+                {t.joinUs.supporterCard.subtitle}
               </p>
               <h3 className="font-serif-kr mt-1.5 text-xl font-semibold text-[#262523]">
-                후원회원(서포터즈) 안내
+                {t.joinUs.supporterCard.title}
               </h3>
               <p className="mt-3 text-base leading-[1.7] text-[#5C564F]">
-                연희단 결의 요양원·복지관 찾아가는 나눔 공연과 청소년 전통예술
-                활동은 서포터즈 분들의 소중한 회비로 이어집니다.
+                {t.joinUs.supporterCard.description}
               </p>
               <ul className="mt-4 space-y-2 border-t border-[#D8D0C5] pt-4 text-sm leading-relaxed text-[#5C564F] sm:text-base">
-                <li>• 회비 사용처: 취약계층 무료 나눔 공연 제작 및 악기·의상 유지</li>
-                <li>• 청소년 예술 지원: 지역 청소년 전통연희 체험 및 무대 기회 제공</li>
-                <li>
-                  • 가입 절차: 문의 접수 후 담당자가 1:1로 연락드려 상세히 안내해
-                  드립니다
-                </li>
+                {t.joinUs.supporterCard.points.map((pt, i) => (
+                  <li key={i}>• {pt}</li>
+                ))}
               </ul>
             </div>
 
@@ -107,7 +102,7 @@ export function JoinUsSection({
                 onClick={onOpenSupporterModal}
                 className="min-h-[48px] w-full rounded-sm border border-[#A63A2B] bg-[#F9F7F2] px-5 py-3 text-sm font-semibold text-[#A63A2B] transition-colors hover:bg-[#A63A2B] hover:text-[#F9F7F2]"
               >
-                후원회원 가입 문의하기
+                {t.joinUs.supporterCard.button}
               </button>
             </div>
           </article>
