@@ -95,7 +95,14 @@ check_socket_open() {
 is_port_in_use() {
   local p=$1
   local host="${2:-127.0.0.1}"
-  check_socket_open "$host" "$p"
+  if check_socket_open "$host" "$p"; then
+    return 0
+  fi
+  if [ "$host" = "127.0.0.1" ]; then
+    python3 -c "import socket; s = socket.socket(socket.AF_INET6, socket.SOCK_STREAM); s.settimeout(0.5); s.connect(('::1', ${p})); s.close()" 2>/dev/null
+    return $?
+  fi
+  return 1
 }
 
 filter_safe_pids() {
@@ -135,15 +142,43 @@ get_pids() {
   local pid_file="/tmp/gyeol_${p}.pid"
   local raw=""
 
-  # 1. LISTEN 소켓 기반 정밀 탐지 (lsof / fuser)
-  if command -v lsof >/dev/null 2>&1; then
-    raw=$(lsof -tiTCP:"${p}" -sTCP:LISTEN 2>/dev/null || true)
-  fi
+  # 1. 커널 소켓 테이블(/proc/net/tcp, tcp6) LISTEN inode 직접 스캔 (IPv4/IPv6 통합, 컨테이너 환경 100% 정확)
+  raw=$(python3 -c "
+import glob, os
+port_hex = f'{int(${p}):04X}'
+inodes = set()
+for path in ('/proc/net/tcp', '/proc/net/tcp6'):
+    if not os.path.exists(path):
+        continue
+    try:
+        with open(path) as f:
+            next(f, None)
+            for line in f:
+                cols = line.split()
+                if len(cols) >= 10 and cols[3] == '0A' and cols[1].split(':')[-1] == port_hex:
+                    inodes.add(f'socket:[{cols[9]}]')
+    except OSError:
+        pass
+if inodes:
+    found = set()
+    for fd in glob.glob('/proc/[0-9]*/fd/*'):
+        try:
+            if os.readlink(fd) in inodes:
+                found.add(fd.split('/')[2])
+        except OSError:
+            pass
+    print(' '.join(sorted(found)))
+" 2>/dev/null || true)
+
+  # 2. fuser / lsof 보조 탐지
   if [ -z "$raw" ] && command -v fuser >/dev/null 2>&1; then
-    raw=$(fuser "${p}/tcp" 2>/dev/null | tr -s ' ' '\n' | grep -E '^[0-9]+$' || true)
+    raw=$(fuser "${p}/tcp" 2>/dev/null | tr -s ' ' '\n' | grep -E '^[0-9]+$' | tr '\n' ' ' || true)
+  fi
+  if [ -z "$raw" ] && command -v lsof >/dev/null 2>&1; then
+    raw=$(lsof -tiTCP:"${p}" -sTCP:LISTEN 2>/dev/null | tr '\n' ' ' || true)
   fi
 
-  # 2. PID 파일 기반 보조 확인 (node/next 프로세스인 경우만)
+  # 3. PID 파일 및 그 자식 프로세스 보조 확인
   if [ -z "$raw" ] && [ -f "$pid_file" ]; then
     local saved_pid
     saved_pid=$(cat "$pid_file" 2>/dev/null | tr -d '[:space:]' || true)
@@ -151,18 +186,11 @@ get_pids() {
       local cmdline
       cmdline=$(ps -o args= -p "$saved_pid" 2>/dev/null || true)
       if [[ "$cmdline" == *"next"* ]] || [[ "$cmdline" == *"node"* ]]; then
-        raw="$saved_pid"
+        local child_pids
+        child_pids=$(pgrep -P "$saved_pid" 2>/dev/null | tr '\n' ' ' || true)
+        raw="${saved_pid} ${child_pids}"
       fi
     fi
-  fi
-
-  # 3. 동일 프로젝트/포트의 Next.js 워커 프로세스만 정밀 매칭 (컨테이너/세션 프로세스 매칭 금지)
-  if [ -z "$raw" ]; then
-    raw=$(ps -eo pid=,args= 2>/dev/null | awk -v port="$p" '
-      /(next-server|next-dev|next dev|next start)/ && $0 ~ ("-p[[:space:]]*" port "([[:space:]]|$)") {
-        print $1
-      }
-    ' || true)
   fi
 
   filter_safe_pids "$raw"
@@ -232,11 +260,17 @@ cmd_stop() {
   pids=$(get_pids "$p")
   if [ -n "$pids" ]; then
     kill -15 $pids 2>/dev/null || true
-    sleep 1
+    for _ in 1 2 3 4 5; do
+      if ! is_port_in_use "$p" && [ -z "$(get_pids "$p")" ]; then
+        break
+      fi
+      sleep 1
+    done
     local remain
     remain=$(get_pids "$p")
     if [ -n "$remain" ]; then
       kill -9 $remain 2>/dev/null || true
+      sleep 1
     fi
     rm -f "$pid_file"
     echo -e "${YELLOW}종료 완료 (PID: ${pids})${NC}"
@@ -250,7 +284,14 @@ cmd_start() {
   local mode=${1:-prod}
   local p=${2:-$DEFAULT_PORT}
   cmd_stop "$p" >/dev/null 2>&1
-  sleep 1
+
+  # 포트가 여전히 점유 중이면 오탐지 방지를 위해 즉시 차단
+  if is_port_in_use "$p"; then
+    local blocking_pids
+    blocking_pids=$(get_pids "$p")
+    echo -e "${RED}✗ [:${p}] 포트가 여전히 사용 중입니다 (점유 PID: ${blocking_pids:-외부/권한없음}). 기동을 중단합니다.${NC}"
+    return 1
+  fi
 
   echo -e "🥁 [:${p}] 연희단 결 (GYEOL : The Grain of Sound) 공식 웹페이지 기동 중 (${mode} 모드, Host: ${DEFAULT_HOST})..."
 
@@ -320,7 +361,15 @@ cmd_start() {
     (cd "${PROJECT_DIR}" && nohup env PORT="$p" HOSTNAME="$DEFAULT_HOST" $next_bin start -H "$DEFAULT_HOST" -p "$p" > "$LOG_FILE" 2>&1 & echo $! > "$pid_file")
   fi
 
-  for i in {1..8}; do
+  local new_pid
+  new_pid=$(cat "$pid_file" 2>/dev/null | tr -d '[:space:]' || true)
+
+  for i in {1..10}; do
+    if [ -n "$new_pid" ] && ! kill -0 "$new_pid" 2>/dev/null && ! is_port_in_use "$p"; then
+      echo -e "${RED}✗ [:${p}] 서버 프로세스가 기동 중 종료되었습니다. 로그를 확인하세요:${NC}"
+      tail -n 20 "$LOG_FILE" 2>/dev/null || true
+      return 1
+    fi
     if is_port_in_use "$p"; then
       echo -e "   ${GREEN}✓ [:${p}] ONLINE 기동 성공 (Local: http://localhost:${p} / Domain: ${PUBLIC_DOMAIN})${NC}"
       echo -e "   ${CYAN}🌐 Any Host / Any Port 접속 지원: ${DEFAULT_HOST}:${p} 바인딩 완료${NC}"
