@@ -6,7 +6,7 @@
 #   • 올인원(All-in-One) 통합 매니저: 컴파일, 빌드, 기동, 중지, 재시작, 시드, 상태 점검 단일화
 #   • Any Host 바인딩: 0.0.0.0 바인딩으로 외부 도메인(https://neptune.axfoundly.com) 및 어디서든 접속 가능
 #   • Any Port 지원: 기본 포트(3030) 외에 임의의 포트(Any Port) 지정 실행 지원
-#   • 운영(prod) / 개발(dev) / 디버그(debug, 인스펙터 30031) 모드 완벽 지원
+#   • 운영(prod) / 개발(dev) / 디버그(debug, 인스펙터 3031) 모드 완벽 지원
 #   • MongoDB (grain_of_sound) 연결 상태 자동 점검 및 TypeScript 타입 검사/클린 빌드 내장
 #
 # [사용법 요약]
@@ -14,7 +14,7 @@
 #     ./run_port.sh start [PORT]            : 운영(prod) 모드 기동 (사전 빌드 없으면 자동 빌드, 기본 3030)
 #     ./run_port.sh prod [PORT]             : 운영(prod) 모드 기동
 #     ./run_port.sh dev [PORT]              : 개발(dev) 모드 기동 (기본 3030)
-#     ./run_port.sh debug [PORT]            : 디버그 모드 (Node 인스펙터 30031)
+#     ./run_port.sh debug [PORT]            : 디버그 모드 (Node 인스펙터 3031)
 #     ./run_port.sh [PORT]                  : 숫자 포트만 입력 시 운영 모드로 즉시 기동 (예: ./run_port.sh 3030)
 #     ./run_port.sh stop [PORT]             : 프로세스 중지
 #     ./run_port.sh restart [dev|prod] [PORT]: 서비스 재시작
@@ -60,7 +60,7 @@ fi
 
 DEFAULT_PORT="${PORT:-${ENV_PORT:-3030}}"
 DEFAULT_HOST="0.0.0.0"
-INSPECT_PORT="${INSPECT_PORT:-30031}"
+INSPECT_PORT="${INSPECT_PORT:-3031}"
 PUBLIC_DOMAIN="${ENV_APP_URL:-https://neptune.axfoundly.com}"
 LOG_FILE="${PROJECT_DIR}/server.log"
 
@@ -411,7 +411,7 @@ cmd_help() {
   echo -e "  • ${BOLD}./run_port.sh dev [PORT]${NC}              : 개발 모드 기동 (기본 포트: 3030)"
   echo -e "  • ${BOLD}./run_port.sh start [PORT]${NC}            : 운영(prod) 모드 기동 (기본 포트: 3030)"
   echo -e "  • ${BOLD}./run_port.sh prod [PORT]${NC}             : 운영(prod) 모드 기동"
-  echo -e "  • ${BOLD}./run_port.sh debug [PORT]${NC}            : 디버그 모드 기동 (인스펙터 30031)"
+  echo -e "  • ${BOLD}./run_port.sh debug [PORT]${NC}            : 디버그 모드 기동 (인스펙터 3031)"
   echo -e "  • ${BOLD}./run_port.sh [PORT]${NC}                  : 지정 포트로 운영 모드 즉시 기동 (예: ./run_port.sh 3030)"
   echo -e "  • ${BOLD}./run_port.sh stop [PORT]${NC}             : 서비스 종료"
   echo -e "  • ${BOLD}./run_port.sh restart [dev|prod] [PORT]${NC}: 서비스 재시작"

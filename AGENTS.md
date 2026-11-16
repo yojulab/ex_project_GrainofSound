@@ -60,7 +60,7 @@
 - **모델 티어**: `Gemini Flash` (Execution Tier)
 - **페르소나**: 카카오톡 공유 미리보기, 모바일 1.5초 이내 초고속 로딩, `https://neptune.axfoundly.com` (Port `3030`) 서버 기동 및 `grain_of_sound` DB 운영을 전담하는 데브옵스/성능 엔지니어.
 - **주요 임무**:
-  - `run_port.sh` 통합 관리 스크립트의 기본 포트를 `3030`(디버그 `30031`), 대상 DB를 `grain_of_sound`로 구성.
+  - `run_port.sh` 통합 관리 스크립트의 기본 포트를 `3030`(디버그 `3031`), 대상 DB를 `grain_of_sound`로 구성.
   - 카카오톡 링크 공유 최적화 Open Graph 메타태그 설정 (`og:title`: `연희단 결 (GYEOL : The Grain of Sound)`, `og:description`: `전통의 결로 이웃과 세계를 잇는 비영리 전통연희단체 연희단 결 공식 페이지입니다. 공연 섭외 및 단원·후원회원 모집 안내`, `og:image`: 한지 배경 위 로고·슬로건 `1200x630` 대표 썸네일, `og:url`: `https://neptune.axfoundly.com`).
   - 공연 아카이브 사진 WebP 압축 및 `loading="lazy"` 적용, 폰트 프리로드 최적화(초기 렌더링 1.5초 이내).
   - GCE VM MongoDB(`grain_of_sound`) 일일 자동 백업(`mongodump`) 및 복구 스크립트 관리.

@@ -19,10 +19,10 @@
       }
     },
     {
-      "name": "Next.js: Attach to Node (Port 30031)",
+      "name": "Next.js: Attach to Node (Port 3031)",
       "type": "node",
       "request": "attach",
-      "port": 30031,
+      "port": 3031,
       "restart": true,
       "skipFiles": ["<node_internals>/**"]
     },

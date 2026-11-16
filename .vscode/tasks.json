@@ -19,7 +19,7 @@
       }
     },
     {
-      "label": "Next.js dev:debug (port 3030 & inspector 30031)",
+      "label": "Next.js dev:debug (port 3030 & inspector 3031)",
       "type": "npm",
       "script": "dev:debug",
       "isBackground": true,

@@ -2,7 +2,7 @@
 
 - **프로젝트명**: 연희단 결 (GYEOL : The Grain of Sound) 공식 소개 및 섭외·모집 웹페이지 구축
 - **기준 사양서**: [`docs/PRDs/gyeol.md`](file:///apps/ex_project_GrainofSound/docs/PRDs/gyeol.md) (비영리 전통연희단체 「연희단 결 (GYEOL : The Grain of Sound)」 공식 웹페이지 작업 지시서)
-- **서비스 도메인 & 포트**: **`https://neptune.axfoundly.com`** / 서비스 포트 **`3030`** (Node 디버그 인스펙터 포트: `30031`)
+- **서비스 도메인 & 포트**: **`https://neptune.axfoundly.com`** / 서비스 포트 **`3030`** (Node 디버그 인스펙터 포트: `3031`)
 - **데이터베이스**: MongoDB 자체 운영 — 접속 DB명: **`grain_of_sound`** (`mongodb://.../grain_of_sound`)
 - **성격**: 단체 브랜드 아이덴티티 대외 홍보('공식 얼굴'), 부천 관내 복지기관 및 지자체·대사관 공연 섭외 접수, 일반회원(연주 단원) 지원 및 후원회원(서포터즈) 가입 문의 유치를 위한 **Mobile-First 원페이지(One-Page) 스토리텔링 웹 + 3대 액션 접수·아카이브 백엔드**
 - **확정 기술 스택**: React + Next.js (App Router) + TypeScript + Tailwind CSS + MongoDB (`grain_of_sound`) + 카카오톡 오픈채팅/SMTP/스프레드시트 알림 연동
@@ -132,4 +132,4 @@ flowchart TD
 
 | 일자 | 버전 | 변경 내용 | 대상 파일 / 규칙 |
 | :--- | :--- | :--- | :--- |
-| 2026-11-15 | **v1.0.0** | **`docs/PRDs/gyeol.md` 기반 비영리 전통연희단체 「연희단 결 (GYEOL : The Grain of Sound)」 하네스 엔지니어링 전면 구성**:<br>① **네트워크 및 도메인 확정**: `https://neptune.axfoundly.com`, 서비스 포트 `3030` (디버그 포트 `30031`) 반영<br>② **데이터베이스 전환**: MongoDB 접속 DB명을 `grain_of_sound`로 변경 반영 (`.env`, `.env.example`, 인프라/백업 스크립트 동기화)<br>③ **디자인 & 도메인 규칙 정립**: Frederic Forest 레퍼런스 기반 한국 전통 '나무·한지·먹색' 컬러 토큰(`#F6F3EC`, `#EAE4D7`, `#1A1917`, `#4A3525`, `#A63A2B`), 5단계 원페이지 스토리텔링 IA, 카카오톡 인앱(`100dvh` & OG 태그) 규칙 수립<br>④ **법적 가드레일 및 3대 액션 폼 설계**: 후원 계좌번호·직접 결제창 노출 절대 금지(1:1 개별 안내 프로세스), `[공연 신청하기]`·`[일반회원(단원) 지원]`·`[후원회원 가입 문의]` 모달 + 카카오톡 오픈채팅 병행 아키텍처 및 6대 에이전트 팀/전용 스킬(`gyeol-editorial-ui`, `gyeol-action-forms`) 구축 | `GEMINI.md`, `AGENTS.md`, `.env`, `.env.example`, `.agents/rules/*`, `.agents/skills/*` |
+| 2026-11-15 | **v1.0.0** | **`docs/PRDs/gyeol.md` 기반 비영리 전통연희단체 「연희단 결 (GYEOL : The Grain of Sound)」 하네스 엔지니어링 전면 구성**:<br>① **네트워크 및 도메인 확정**: `https://neptune.axfoundly.com`, 서비스 포트 `3030` (디버그 포트 `3031`) 반영<br>② **데이터베이스 전환**: MongoDB 접속 DB명을 `grain_of_sound`로 변경 반영 (`.env`, `.env.example`, 인프라/백업 스크립트 동기화)<br>③ **디자인 & 도메인 규칙 정립**: Frederic Forest 레퍼런스 기반 한국 전통 '나무·한지·먹색' 컬러 토큰(`#F6F3EC`, `#EAE4D7`, `#1A1917`, `#4A3525`, `#A63A2B`), 5단계 원페이지 스토리텔링 IA, 카카오톡 인앱(`100dvh` & OG 태그) 규칙 수립<br>④ **법적 가드레일 및 3대 액션 폼 설계**: 후원 계좌번호·직접 결제창 노출 절대 금지(1:1 개별 안내 프로세스), `[공연 신청하기]`·`[일반회원(단원) 지원]`·`[후원회원 가입 문의]` 모달 + 카카오톡 오픈채팅 병행 아키텍처 및 6대 에이전트 팀/전용 스킬(`gyeol-editorial-ui`, `gyeol-action-forms`) 구축 | `GEMINI.md`, `AGENTS.md`, `.env`, `.env.example`, `.agents/rules/*`, `.agents/skills/*` |

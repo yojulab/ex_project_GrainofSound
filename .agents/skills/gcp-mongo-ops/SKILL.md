@@ -13,7 +13,7 @@ description: "연희단 결(GYEOL) 인프라 프로비저닝, https://neptune.ax
 
 ### 1-1. 데이터베이스 및 네트워크 사양
 - **서비스 도메인**: `https://neptune.axfoundly.com`
-- **애플리케이션 바인딩 포트**: `3030` (디버그 포트: `30031`)
+- **애플리케이션 바인딩 포트**: `3030` (디버그 포트: `3031`)
 - **대상 데이터베이스명**: **`grain_of_sound`**
 - **컨테이너/로컬 접속 URI (`.env`)**:
   `MONGODB_URI=mongodb://admin:admin123@graphrag_agent_db_mongo:27017/grain_of_sound?authSource=admin`

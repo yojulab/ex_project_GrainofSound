@@ -2,7 +2,7 @@
 
 - **문서 참조**: [`docs/PRDs/gyeol.md`](file:///apps/ex_project_GrainofSound/docs/PRDs/gyeol.md)
 - **프로젝트명**: **연희단 결 (GYEOL : The Grain of Sound) 공식 소개 및 섭외·모집 웹페이지**
-- **서비스 URL & 포트**: **`https://neptune.axfoundly.com`** (Port: **`3030`**, Inspector: `30031`)
+- **서비스 URL & 포트**: **`https://neptune.axfoundly.com`** (Port: **`3030`**, Inspector: `3031`)
 - **데이터베이스**: MongoDB **`grain_of_sound`** (`mongodb://.../grain_of_sound`)
 - **핵심 목적**:
   1. 단체 브랜드 아이덴티티 대외 홍보 ('공식 얼굴' 역할)
