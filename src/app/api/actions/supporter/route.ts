@@ -38,6 +38,8 @@ export async function POST(req: NextRequest) {
       preferredContactMethod: parsed.data.preferredContactMethod,
       supportType: parsed.data.supportType,
       cheeringMessage: parsed.data.cheeringMessage,
+      disclaimerAcknowledged: parsed.data.disclaimerAcknowledged,
+      privacyAgreed: parsed.data.privacyAgreed,
       status: "received",
       notificationSent: false,
       ipAddress: ip,
@@ -51,6 +53,8 @@ export async function POST(req: NextRequest) {
         `휴대전화: ${parsed.data.phone}`,
         `선호 안내 방식: ${parsed.data.preferredContactMethod}`,
         `참여 희망 형태: ${parsed.data.supportType}`,
+        `기부금영수증 미발행 고지인지: 동의완료`,
+        `개인정보 수집동의: 동의완료`,
         `응원 한마디: ${parsed.data.cheeringMessage || "없음"}`,
       ].join("\n"),
     });

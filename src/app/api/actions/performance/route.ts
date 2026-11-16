@@ -39,6 +39,7 @@ export async function POST(req: NextRequest) {
       preferredDatePlace: parsed.data.preferredDatePlace,
       eventType: parsed.data.eventType,
       notes: parsed.data.notes,
+      privacyAgreed: parsed.data.privacyAgreed,
       status: "received",
       notificationSent: false,
       ipAddress: ip,
@@ -52,6 +53,7 @@ export async function POST(req: NextRequest) {
         `담당자: ${parsed.data.contactName} (${parsed.data.contactPhone})`,
         `희망 일시/장소: ${parsed.data.preferredDatePlace}`,
         `행사 성격: ${parsed.data.eventType}`,
+        `개인정보 수집동의: 동의완료`,
         `기타 요청사항: ${parsed.data.notes || "없음"}`,
       ].join("\n"),
     });

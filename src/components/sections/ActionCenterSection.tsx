@@ -23,7 +23,7 @@ export function ActionCenterSection({
           <p className="font-serif-en text-sm tracking-[0.2em] text-[#A63A2B] uppercase">
             05 · Action Center
           </p>
-          <h2 className="font-serif-kr mt-2 text-2xl font-semibold text-[#1A1917] sm:text-3xl">
+          <h2 className="font-serif-kr mt-2 text-2xl font-semibold text-[#262523] sm:text-3xl">
             연희단 결과 마음을 잇는 첫걸음
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-base leading-[1.7] text-[#5C564F]">
@@ -39,7 +39,7 @@ export function ActionCenterSection({
           onClick={() => onOpenModal("performance")}
           data-serial-id="G05-ACT-BTN01"
           data-serial-label="Action Center - [공연 신청하기] 모달 호출 버튼"
-          className="flex min-h-[112px] flex-col justify-between border border-[#4A3525] bg-[#4A3525] p-6 text-left text-[#F6F3EC] transition-colors hover:bg-[#38271B]"
+          className="flex min-h-[112px] flex-col justify-between border border-[#4A3525] bg-[#4A3525] p-6 text-left text-[#F9F7F2] transition-colors hover:bg-[#38271B]"
         >
           <span className="font-serif-en text-xs tracking-[0.18em] opacity-80 uppercase">
             01 · Performance Booking
@@ -48,7 +48,7 @@ export function ActionCenterSection({
             <span className="font-serif-kr block text-lg font-semibold">
               공연 신청하기
             </span>
-            <span className="mt-1 block text-xs text-[#EAE4D7]">
+            <span className="mt-1 block text-xs text-[#EFECE4]">
               요양원·복지관·지자체·대사관 섭외 문의 →
             </span>
           </div>
@@ -59,7 +59,7 @@ export function ActionCenterSection({
           onClick={() => onOpenModal("member")}
           data-serial-id="G05-ACT-BTN02"
           data-serial-label="Action Center - [일반회원(단원) 지원] 모달 호출 버튼"
-          className="flex min-h-[112px] flex-col justify-between border border-[#4A3525] bg-[#EAE4D7]/70 p-6 text-left text-[#1A1917] transition-colors hover:bg-[#EAE4D7]"
+          className="flex min-h-[112px] flex-col justify-between border border-[#4A3525] bg-[#EFECE4]/70 p-6 text-left text-[#262523] transition-colors hover:bg-[#EFECE4]"
         >
           <span className="font-serif-en text-xs tracking-[0.18em] text-[#4A3525] uppercase">
             02 · Join as Performer
@@ -79,7 +79,7 @@ export function ActionCenterSection({
           onClick={() => onOpenModal("supporter")}
           data-serial-id="G05-ACT-BTN03"
           data-serial-label="Action Center - [후원회원 가입 문의] 모달 호출 버튼"
-          className="flex min-h-[112px] flex-col justify-between border border-[#A63A2B] bg-[#F6F3EC] p-6 text-left text-[#1A1917] transition-colors hover:bg-[#EAE4D7]/60"
+          className="flex min-h-[112px] flex-col justify-between border border-[#A63A2B] bg-[#F9F7F2] p-6 text-left text-[#262523] transition-colors hover:bg-[#EFECE4]/60"
         >
           <span className="font-serif-en text-xs tracking-[0.18em] text-[#A63A2B] uppercase">
             03 · Supporter Inquiry
@@ -96,9 +96,9 @@ export function ActionCenterSection({
       </div>
 
       {/* 카카오톡 오픈채팅 직결 배너 */}
-      <div className="mt-6 flex flex-col items-center justify-between gap-4 border border-[#D8D0C5] bg-[#EAE4D7]/45 p-5 sm:flex-row sm:px-7">
+      <div className="mt-6 flex flex-col items-center justify-between gap-4 border border-[#D8D0C5] bg-[#EFECE4]/45 p-5 sm:flex-row sm:px-7">
         <div className="text-center sm:text-left">
-          <p className="font-serif-kr text-base font-semibold text-[#1A1917]">
+          <p className="font-serif-kr text-base font-semibold text-[#262523]">
             메신저로 바로 상담하고 싶으신가요?
           </p>
           <p className="mt-0.5 text-sm text-[#5C564F]">
@@ -112,7 +112,7 @@ export function ActionCenterSection({
           rel="noopener noreferrer"
           data-serial-id="G05-ACT-KAKAO01"
           data-serial-label="카카오톡 오픈채팅 1:1 직통 연결 버튼"
-          className="inline-flex min-h-[48px] w-full shrink-0 items-center justify-center gap-2 rounded-sm bg-[#1A1917] px-5 py-3 text-sm font-semibold text-[#F6F3EC] transition-colors hover:bg-[#4A3525] sm:w-auto"
+          className="inline-flex min-h-[48px] w-full shrink-0 items-center justify-center gap-2 rounded-sm bg-[#262523] px-5 py-3 text-sm font-semibold text-[#F9F7F2] transition-colors hover:bg-[#4A3525] sm:w-auto"
         >
           <MessageCircle className="h-4 w-4" />
           <span>카카오톡 1:1 오픈채팅 연결</span>

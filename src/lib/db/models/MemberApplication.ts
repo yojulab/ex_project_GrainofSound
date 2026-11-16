@@ -13,6 +13,7 @@ export interface IMemberApplication extends Document {
   region: string;
   specialties: MemberSpecialty[];
   experienceAndIntro: string;
+  privacyAgreed: boolean;
   status: MemberApplicationStatus;
   notificationSent: boolean;
   ipAddress: string;
@@ -41,6 +42,7 @@ const MemberApplicationSchema = new Schema<IMemberApplication>(
       trim: true,
       maxlength: 1500,
     },
+    privacyAgreed: { type: Boolean, required: true, default: true },
     status: {
       type: String,
       enum: ["received", "contacted", "joined", "archived"],

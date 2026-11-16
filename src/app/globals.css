@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 :root {
-  --bg-hanji: #F6F3EC;
-  --bg-wood-beige: #EAE4D7;
-  --text-ink: #1A1917;
+  --bg-hanji: #F9F7F2;
+  --bg-wood-beige: #EFECE4;
+  --text-ink: #262523;
   --text-muted-ink: #5C564F;
   --accent-wood: #4A3525;
   --accent-seal: #A63A2B;

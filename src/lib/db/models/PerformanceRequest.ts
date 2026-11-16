@@ -18,6 +18,7 @@ export interface IPerformanceRequest extends Document {
   preferredDatePlace: string;
   eventType: PerformanceEventType;
   notes?: string;
+  privacyAgreed: boolean;
   status: PerformanceStatus;
   notificationSent: boolean;
   ipAddress: string;
@@ -43,6 +44,7 @@ const PerformanceRequestSchema = new Schema<IPerformanceRequest>(
       required: true,
     },
     notes: { type: String, trim: true, maxlength: 1000 },
+    privacyAgreed: { type: Boolean, required: true, default: true },
     status: {
       type: String,
       enum: ["received", "contacted", "confirmed", "archived"],

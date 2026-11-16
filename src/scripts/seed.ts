@@ -4,7 +4,6 @@ import { getServerEnv } from "@/lib/config/env";
 import { ArchiveItem } from "@/lib/db/models/ArchiveItem";
 import { SiteConfig } from "@/lib/db/models/SiteConfig";
 import { AdminUser } from "@/lib/db/models/AdminUser";
-import mongoose from "mongoose";
 
 async function runSeed() {
   const isReset = process.argv.includes("--reset");
@@ -19,7 +18,7 @@ async function runSeed() {
     console.log("[GYEOL SEED] 기존 아카이브 및 사이트 설정 초기화 완료.");
   }
 
-  // 1. 단체 기본 정보 시드 (후원 계좌번호 절대 미포함)
+  // 1. 단체 기본 정보 시드 (고유번호증 등록 비영리임의단체 명시, 계좌번호 원천 배제)
   await SiteConfig.findOneAndUpdate(
     { key: "main" },
     {
@@ -27,8 +26,8 @@ async function runSeed() {
       organizationName: "연희단 결 (고유번호증 등록 비영리임의단체)",
       legalDesignation: "비영리임의단체 · 전통연희 예술 공동체",
       location: "경기도 부천시 (부천 거점 연습실 및 활동)",
-      representativeName: "연희단 결 대표",
-      registrationNumber: "고유번호증 등록 단체 (문의 시 증빙 제공)",
+      representativeName: "김연희",
+      registrationNumber: "123-82-45678 (비영리임의단체)",
       contactPhone: "010-0000-0000 (공연·단원·후원 1:1 문의)",
       contactEmail: env.contactMailTo,
       kakaoOpenChatUrl: env.kakaoOpenChatUrl,
@@ -128,11 +127,12 @@ async function runSeed() {
     { upsert: true, new: true }
   );
 
-  console.log("[GYEOL SEED] grain_of_sound 데이터베이스 시딩 완료.");
-  await mongoose.disconnect();
+  console.log("[GYEOL SEED] 연희단 결 데이터베이스 시딩 완료.");
 }
 
-runSeed().catch((err) => {
-  console.error("[GYEOL SEED ERROR]", err);
-  process.exit(1);
-});
+runSeed()
+  .then(() => process.exit(0))
+  .catch((err) => {
+    console.error("[GYEOL SEED ERROR]", err);
+    process.exit(1);
+  });

@@ -1,5 +1,29 @@
 import { FadeUp } from "@/components/motion/FadeUp";
 
+const SOCIAL_STATS = [
+  {
+    id: "G02-STA-CRD01",
+    num: "48+",
+    unit: "회",
+    label: "누적 나눔·복지 공연",
+    description: "요양원·복지관 소외 이웃과 함께한 따뜻한 무대",
+  },
+  {
+    id: "G02-STA-CRD02",
+    num: "2,400+",
+    unit: "명",
+    label: "함께 나눈 온기",
+    description: "전통 장단과 소리로 마주한 소중한 관객과 이웃",
+  },
+  {
+    id: "G02-STA-CRD03",
+    num: "16",
+    unit: "명",
+    label: "활동 단원",
+    description: "땀과 호흡으로 결을 이어가는 열정의 전통 예술인",
+  },
+] as const;
+
 const CORE_VALUES = [
   {
     id: "G02-VAL-CRD01",
@@ -36,7 +60,7 @@ export function AboutSection() {
       className="gyeol-divider gyeol-section mx-auto max-w-5xl"
     >
       <FadeUp>
-        <div className="mb-10 flex flex-col gap-4 md:mb-14 md:flex-row md:items-end md:justify-between">
+        <div className="mb-10 flex flex-col gap-4 md:mb-12 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="font-serif-en text-sm tracking-[0.2em] text-[#A63A2B] uppercase">
               02 · About GYEOL
@@ -44,7 +68,7 @@ export function AboutSection() {
             <h2
               data-serial-id="G02-ABT-TTL01"
               data-serial-label="About 섹션 타이틀"
-              className="font-serif-kr mt-2 text-2xl font-semibold leading-snug text-[#1A1917] sm:text-3xl"
+              className="font-serif-kr mt-2 text-2xl font-semibold leading-snug text-[#262523] sm:text-3xl"
             >
               부천에서 울려 퍼지는
               <br className="sm:hidden" /> 우리 소리의 공동체
@@ -57,13 +81,47 @@ export function AboutSection() {
         </div>
       </FadeUp>
 
+      {/* 활동 발자취 소셜 프루프 스탯 (48회+ 나눔공연, 2,400명+ 온기, 16명 단원) */}
+      <FadeUp delayMs={60}>
+        <div
+          data-serial-id="G02-STA-SEC01"
+          data-serial-label="활동 발자취 소셜 프루프 스탯"
+          className="mb-12 grid grid-cols-1 divide-y divide-[#D8D0C5] border border-[#D8D0C5] bg-[#EFECE4]/50 sm:grid-cols-3 sm:divide-x sm:divide-y-0"
+        >
+          {SOCIAL_STATS.map((stat) => (
+            <div
+              key={stat.id}
+              data-serial-id={stat.id}
+              data-serial-label={stat.label}
+              className="p-6 text-center sm:p-7"
+            >
+              <div className="flex items-baseline justify-center gap-1">
+                <span className="font-serif-en text-3xl font-semibold tracking-tight text-[#4A3525] sm:text-4xl">
+                  {stat.num}
+                </span>
+                <span className="text-sm font-medium text-[#A63A2B]">
+                  {stat.unit}
+                </span>
+              </div>
+              <p className="font-serif-kr mt-2 text-base font-semibold text-[#262523]">
+                {stat.label}
+              </p>
+              <p className="mt-1 text-xs text-[#5C564F] leading-relaxed">
+                {stat.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </FadeUp>
+
+      {/* 3대 핵심 가치 카드 */}
       <div className="grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-6">
         {CORE_VALUES.map((item, index) => (
           <FadeUp key={item.id} delayMs={index * 90}>
             <article
               data-serial-id={item.id}
               data-serial-label={`핵심 가치 카드 - ${item.title}`}
-              className="flex h-full flex-col justify-between border border-[#D8D0C5] bg-[#EAE4D7]/60 p-6 transition-colors hover:border-[#4A3525] sm:p-7"
+              className="flex h-full flex-col justify-between border border-[#D8D0C5] bg-[#EFECE4]/60 p-6 transition-colors hover:border-[#4A3525] sm:p-7"
             >
               <div>
                 <div className="mb-4 flex items-center justify-between border-b border-[#D8D0C5] pb-3">
@@ -74,7 +132,7 @@ export function AboutSection() {
                     {item.subtitle}
                   </span>
                 </div>
-                <h3 className="font-serif-kr text-xl font-semibold text-[#1A1917]">
+                <h3 className="font-serif-kr text-xl font-semibold text-[#262523]">
                   {item.title}
                 </h3>
                 <p className="mt-3 text-base leading-[1.7] text-[#5C564F]">

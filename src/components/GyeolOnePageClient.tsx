@@ -15,6 +15,7 @@ import {
 import { PerformanceModal } from "@/components/modals/PerformanceModal";
 import { MemberModal } from "@/components/modals/MemberModal";
 import { SupporterModal } from "@/components/modals/SupporterModal";
+import { DigitalCardModal } from "@/components/modals/DigitalCardModal";
 import type { ArchiveItemView } from "@/components/modals/ArchiveLightboxModal";
 
 interface GyeolOnePageClientProps {
@@ -29,10 +30,11 @@ export function GyeolOnePageClient({
   archiveItems,
 }: GyeolOnePageClientProps) {
   const [activeModal, setActiveModal] = useState<ActionModalType>(null);
+  const [digitalCardOpen, setDigitalCardOpen] = useState(false);
 
   return (
-    <div className="min-h-[100dvh] bg-[#F6F3EC] text-[#1A1917]">
-      <MinimalHeader />
+    <div className="min-h-[100dvh] bg-[#F9F7F2] text-[#262523]">
+      <MinimalHeader onOpenDigitalCard={() => setDigitalCardOpen(true)} />
 
       <main>
         <HeroSection />
@@ -69,6 +71,11 @@ export function GyeolOnePageClient({
         open={activeModal === "supporter"}
         onClose={() => setActiveModal(null)}
         kakaoOpenChatUrl={kakaoOpenChatUrl}
+      />
+      <DigitalCardModal
+        open={digitalCardOpen}
+        onClose={() => setDigitalCardOpen(false)}
+        siteInfo={siteInfo}
       />
     </div>
   );

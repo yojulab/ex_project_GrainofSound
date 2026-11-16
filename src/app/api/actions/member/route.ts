@@ -38,6 +38,7 @@ export async function POST(req: NextRequest) {
       region: parsed.data.region,
       specialties: parsed.data.specialties,
       experienceAndIntro: parsed.data.experienceAndIntro,
+      privacyAgreed: parsed.data.privacyAgreed,
       status: "received",
       notificationSent: false,
       ipAddress: ip,
@@ -50,6 +51,7 @@ export async function POST(req: NextRequest) {
         `성함: ${parsed.data.applicantName} (${parsed.data.phone})`,
         `거주 지역: ${parsed.data.region}`,
         `주요 분야: ${parsed.data.specialties.join(", ")}`,
+        `개인정보 수집동의: 동의완료`,
         `경력 및 소개:\n${parsed.data.experienceAndIntro}`,
       ].join("\n"),
     });

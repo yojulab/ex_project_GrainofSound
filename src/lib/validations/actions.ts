@@ -74,6 +74,9 @@ export const performanceRequestSchema = z.object({
     .pipe(z.string().max(1000, "기타 요청사항은 1000자 이내로 입력해 주세요."))
     .optional()
     .default(""),
+  privacyAgreed: z.boolean().refine((val) => val === true, {
+    message: "개인정보 수집 및 이용에 동의해 주세요.",
+  }),
   _hp: z.string().optional().default(""),
 });
 
@@ -112,6 +115,9 @@ export const memberApplicationSchema = z.object({
         .min(5, "연주 경력 및 간단한 소개를 입력해 주세요.")
         .max(1500, "소개는 1500자 이내로 입력해 주세요.")
     ),
+  privacyAgreed: z.boolean().refine((val) => val === true, {
+    message: "개인정보 수집 및 이용에 동의해 주세요.",
+  }),
   _hp: z.string().optional().default(""),
 });
 
@@ -141,6 +147,12 @@ export const supporterInquirySchema = z.object({
     .pipe(z.string().max(1000, "응원 한마디는 1000자 이내로 입력해 주세요."))
     .optional()
     .default(""),
+  disclaimerAcknowledged: z.boolean().refine((val) => val === true, {
+    message: "소득공제용 기부금 영수증 미발행 고지 사항을 확인하고 동의해 주세요.",
+  }),
+  privacyAgreed: z.boolean().refine((val) => val === true, {
+    message: "개인정보 수집 및 이용에 동의해 주세요.",
+  }),
   _hp: z.string().optional().default(""),
 });
 

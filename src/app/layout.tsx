@@ -9,18 +9,24 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#F6F3EC",
+  themeColor: "#F9F7F2",
 };
 
 export const metadata: Metadata = {
   metadataBase: new URL(appUrl),
-  title: "연희단 결 (GYEOL : The Grain of Sound)",
+  title: "연희단 결 (GYEOL : The Grain of Sound) — 비영리 전통연희단체",
   description:
-    "전통의 결로 이웃과 세계를 잇는 비영리 전통연희단체 연희단 결 공식 페이지입니다. 공연 섭외 및 단원·후원회원 모집 안내",
+    "나무와 가죽, 사람의 숨결이 빚어내는 우리 소리의 결. 부천 거점 비영리 전통연희단체 연희단 결 공식 페이지입니다. 나눔·축제 공연 섭외, 단원 지원 및 후원회원 가입 안내",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "연희단 결",
+  },
   openGraph: {
     title: "연희단 결 (GYEOL : The Grain of Sound)",
     description:
-      "전통의 결로 이웃과 세계를 잇는 비영리 전통연희단체 연희단 결 공식 페이지입니다. 공연 섭외 및 단원·후원회원 모집 안내",
+      "나무와 가죽, 사람의 숨결이 빚어내는 우리 소리의 결 — 전통의 결로 이웃과 세계를 잇는 비영리 전통연희단체 연희단 결 공식 페이지",
     url: appUrl,
     siteName: "연희단 결 (GYEOL : The Grain of Sound)",
     locale: "ko_KR",
@@ -31,6 +37,7 @@ export const metadata: Metadata = {
         width: 1200,
         height: 630,
         alt: "연희단 결 (GYEOL : The Grain of Sound) 한지 에디토리얼 대표 이미지",
+        type: "image/png",
       },
     ],
   },
@@ -68,7 +75,7 @@ export default function RootLayout({
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
         />
       </head>
-      <body className="antialiased">
+      <body className="antialiased bg-[#F9F7F2] text-[#262523]">
         <div className="hanji-grain-overlay" aria-hidden="true" />
         {children}
         <UiInspector />

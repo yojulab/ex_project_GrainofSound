@@ -18,6 +18,8 @@ export interface ISupporterInquiry extends Document {
   preferredContactMethod: PreferredContactMethod;
   supportType: SupportType;
   cheeringMessage?: string;
+  disclaimerAcknowledged: boolean;
+  privacyAgreed: boolean;
   status: SupporterInquiryStatus;
   notificationSent: boolean;
   ipAddress: string;
@@ -46,6 +48,8 @@ const SupporterInquirySchema = new Schema<ISupporterInquiry>(
       required: true,
     },
     cheeringMessage: { type: String, trim: true, maxlength: 1000 },
+    disclaimerAcknowledged: { type: Boolean, required: true, default: true },
+    privacyAgreed: { type: Boolean, required: true, default: true },
     status: {
       type: String,
       enum: ["received", "guided_1to1", "completed", "archived"],

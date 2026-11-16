@@ -21,7 +21,7 @@ export function JoinUsSection({
           <p className="font-serif-en text-sm tracking-[0.2em] text-[#A63A2B] uppercase">
             04 · Join Us
           </p>
-          <h2 className="font-serif-kr mt-2 text-2xl font-semibold text-[#1A1917] sm:text-3xl">
+          <h2 className="font-serif-kr mt-2 text-2xl font-semibold text-[#262523] sm:text-3xl">
             소리의 결을 함께 빚어가는 길
           </h2>
           <p className="mt-3 max-w-2xl text-base leading-[1.7] text-[#5C564F]">
@@ -38,18 +38,18 @@ export function JoinUsSection({
           <article
             data-serial-id="G04-JOIN-CRD01"
             data-serial-label="일반단원(연주 단원) 모집 안내 카드"
-            className="flex h-full flex-col justify-between border border-[#D8D0C5] bg-[#EAE4D7]/55 p-6 sm:p-8"
+            className="flex h-full flex-col justify-between border border-[#D8D0C5] bg-[#EFECE4]/55 p-6 sm:p-8"
           >
             <div>
               <p className="font-serif-en text-xs tracking-[0.18em] text-[#4A3525] uppercase">
                 PERFORMING MEMBER
               </p>
-              <h3 className="font-serif-kr mt-1.5 text-xl font-semibold text-[#1A1917]">
+              <h3 className="font-serif-kr mt-1.5 text-xl font-semibold text-[#262523]">
                 일반단원 모집 안내
               </h3>
               <p className="mt-3 text-base leading-[1.7] text-[#5C564F]">
                 경기도 부천시 및 인근 지역(인천·서울 서부 등) 거주자 중{" "}
-                <strong className="font-semibold text-[#1A1917]">
+                <strong className="font-semibold text-[#262523]">
                   장구 · 소고 · 민요
                 </strong>{" "}
                 등 전통연희 유경험자 분들을 환영합니다.
@@ -65,7 +65,7 @@ export function JoinUsSection({
               <button
                 type="button"
                 onClick={onOpenMemberModal}
-                className="min-h-[48px] w-full rounded-sm border border-[#4A3525] bg-[#F6F3EC] px-5 py-3 text-sm font-semibold text-[#4A3525] transition-colors hover:bg-[#4A3525] hover:text-[#F6F3EC]"
+                className="min-h-[48px] w-full rounded-sm border border-[#4A3525] bg-[#F9F7F2] px-5 py-3 text-sm font-semibold text-[#4A3525] transition-colors hover:bg-[#4A3525] hover:text-[#F9F7F2]"
               >
                 일반회원(단원) 지원하기
               </button>
@@ -78,13 +78,13 @@ export function JoinUsSection({
           <article
             data-serial-id="G04-JOIN-CRD02"
             data-serial-label="후원회원(서포터즈) 안내 카드"
-            className="flex h-full flex-col justify-between border border-[#D8D0C5] bg-[#EAE4D7]/55 p-6 sm:p-8"
+            className="flex h-full flex-col justify-between border border-[#D8D0C5] bg-[#EFECE4]/55 p-6 sm:p-8"
           >
             <div>
               <p className="font-serif-en text-xs tracking-[0.18em] text-[#A63A2B] uppercase">
                 SUPPORTERS
               </p>
-              <h3 className="font-serif-kr mt-1.5 text-xl font-semibold text-[#1A1917]">
+              <h3 className="font-serif-kr mt-1.5 text-xl font-semibold text-[#262523]">
                 후원회원(서포터즈) 안내
               </h3>
               <p className="mt-3 text-base leading-[1.7] text-[#5C564F]">
@@ -105,7 +105,7 @@ export function JoinUsSection({
               <button
                 type="button"
                 onClick={onOpenSupporterModal}
-                className="min-h-[48px] w-full rounded-sm border border-[#A63A2B] bg-[#F6F3EC] px-5 py-3 text-sm font-semibold text-[#A63A2B] transition-colors hover:bg-[#A63A2B] hover:text-[#F6F3EC]"
+                className="min-h-[48px] w-full rounded-sm border border-[#A63A2B] bg-[#F9F7F2] px-5 py-3 text-sm font-semibold text-[#A63A2B] transition-colors hover:bg-[#A63A2B] hover:text-[#F9F7F2]"
               >
                 후원회원 가입 문의하기
               </button>

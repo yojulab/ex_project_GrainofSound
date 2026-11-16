@@ -43,11 +43,11 @@ export function ModalShell({
       aria-label={title}
       data-serial-id={serialId}
       data-serial-label={`${title} 모달`}
-      className="fixed inset-0 z-50 flex items-end justify-center bg-[#1A1917]/65 p-0 backdrop-blur-xs sm:items-center sm:p-4"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-[#262523]/65 p-0 backdrop-blur-xs sm:items-center sm:p-4"
       onClick={onClose}
     >
       <div
-        className="relative max-h-[92dvh] w-full max-w-lg overflow-y-auto border border-[#D8D0C5] bg-[#F6F3EC] p-5 shadow-2xl sm:p-7"
+        className="relative max-h-[92dvh] w-full max-w-lg overflow-y-auto border border-[#D8D0C5] bg-[#F9F7F2] p-5 shadow-2xl sm:p-7"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start justify-between border-b border-[#D8D0C5] pb-4">
@@ -55,7 +55,7 @@ export function ModalShell({
             <p className="font-serif-en text-xs tracking-[0.18em] text-[#A63A2B] uppercase">
               {subtitle}
             </p>
-            <h2 className="font-serif-kr mt-1 text-xl font-semibold text-[#1A1917]">
+            <h2 className="font-serif-kr mt-1 text-xl font-semibold text-[#262523]">
               {title}
             </h2>
           </div>
@@ -63,7 +63,7 @@ export function ModalShell({
             type="button"
             onClick={onClose}
             aria-label="모달 닫기"
-            className="inline-flex h-10 w-10 items-center justify-center border border-[#D8D0C5] bg-[#F6F3EC] text-[#1A1917] transition-colors hover:border-[#4A3525] hover:bg-[#EAE4D7]"
+            className="inline-flex h-10 w-10 items-center justify-center border border-[#D8D0C5] bg-[#F9F7F2] text-[#262523] transition-colors hover:border-[#4A3525] hover:bg-[#EFECE4]"
           >
             <X className="h-5 w-5" />
           </button>
