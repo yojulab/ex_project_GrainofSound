@@ -98,15 +98,74 @@ is_port_in_use() {
   check_socket_open "$host" "$p"
 }
 
+filter_safe_pids() {
+  local raw_pids="$1"
+  [ -z "$raw_pids" ] && return 0
+
+  # PID 1 및 현재 쉘/스크립트의 모든 조상 프로세스는 절대 kill 대상에서 제외
+  local protected=" 1 $$ $PPID "
+  local cur="$$"
+  local hops=0
+  while [ "$hops" -lt 20 ]; do
+    local parent
+    parent=$(ps -o ppid= -p "$cur" 2>/dev/null | tr -d ' ' || true)
+    if [ -z "$parent" ] || [ "$parent" = "0" ] || [ "$parent" = "$cur" ]; then
+      break
+    fi
+    protected="${protected}${parent} "
+    cur="$parent"
+    hops=$((hops + 1))
+  done
+
+  local safe=""
+  for pid in $raw_pids; do
+    if [[ "$pid" =~ ^[0-9]+$ ]]; then
+      if [[ "$protected" != *" ${pid} "* ]]; then
+        if [[ " ${safe} " != *" ${pid} "* ]]; then
+          safe="${safe:+${safe} }${pid}"
+        fi
+      fi
+    fi
+  done
+  echo "$safe"
+}
+
 get_pids() {
   local p=${1:-$DEFAULT_PORT}
-  local pids
-  pids=$(fuser "${p}/tcp" 2>/dev/null | tr -s ' ' '\n' | grep -v '^$' || true)
-  if [ -n "$pids" ]; then
-    echo "$pids" | tr '\n' ' ' | sed 's/[[:space:]]*$//'
-    return
+  local pid_file="/tmp/gyeol_${p}.pid"
+  local raw=""
+
+  # 1. LISTEN 소켓 기반 정밀 탐지 (lsof / fuser)
+  if command -v lsof >/dev/null 2>&1; then
+    raw=$(lsof -tiTCP:"${p}" -sTCP:LISTEN 2>/dev/null || true)
   fi
-  pgrep -f "next.*(${p}|dev|start|server)" 2>/dev/null || true
+  if [ -z "$raw" ] && command -v fuser >/dev/null 2>&1; then
+    raw=$(fuser "${p}/tcp" 2>/dev/null | tr -s ' ' '\n' | grep -E '^[0-9]+$' || true)
+  fi
+
+  # 2. PID 파일 기반 보조 확인 (node/next 프로세스인 경우만)
+  if [ -z "$raw" ] && [ -f "$pid_file" ]; then
+    local saved_pid
+    saved_pid=$(cat "$pid_file" 2>/dev/null | tr -d '[:space:]' || true)
+    if [[ "$saved_pid" =~ ^[0-9]+$ ]] && kill -0 "$saved_pid" 2>/dev/null; then
+      local cmdline
+      cmdline=$(ps -o args= -p "$saved_pid" 2>/dev/null || true)
+      if [[ "$cmdline" == *"next"* ]] || [[ "$cmdline" == *"node"* ]]; then
+        raw="$saved_pid"
+      fi
+    fi
+  fi
+
+  # 3. 동일 프로젝트/포트의 Next.js 워커 프로세스만 정밀 매칭 (컨테이너/세션 프로세스 매칭 금지)
+  if [ -z "$raw" ]; then
+    raw=$(ps -eo pid=,args= 2>/dev/null | awk -v port="$p" '
+      /(next-server|next-dev|next dev|next start)/ && $0 ~ ("-p[[:space:]]*" port "([[:space:]]|$)") {
+        print $1
+      }
+    ' || true)
+  fi
+
+  filter_safe_pids "$raw"
 }
 
 # ------------------------------------------------------------------------------
@@ -167,6 +226,7 @@ cmd_seed() {
 # ------------------------------------------------------------------------------
 cmd_stop() {
   local p=${1:-$DEFAULT_PORT}
+  local pid_file="/tmp/gyeol_${p}.pid"
   echo -n -e "🛑 [:${p}] 프로세스 중지 중... "
   local pids
   pids=$(get_pids "$p")
@@ -178,8 +238,10 @@ cmd_stop() {
     if [ -n "$remain" ]; then
       kill -9 $remain 2>/dev/null || true
     fi
+    rm -f "$pid_file"
     echo -e "${YELLOW}종료 완료 (PID: ${pids})${NC}"
   else
+    rm -f "$pid_file"
     echo -e "${NC}실행 중인 프로세스 없음${NC}"
   fi
 }
@@ -244,17 +306,18 @@ cmd_start() {
     next_bin="npx next"
   fi
 
+  local pid_file="/tmp/gyeol_${p}.pid"
   if [ "$mode" = "debug" ]; then
-    (cd "${PROJECT_DIR}" && nohup env PORT="$p" HOSTNAME="$DEFAULT_HOST" NODE_OPTIONS="--inspect=0.0.0.0:${INSPECT_PORT}" $next_bin dev -H "$DEFAULT_HOST" -p "$p" > "$LOG_FILE" 2>&1 &)
+    (cd "${PROJECT_DIR}" && nohup env PORT="$p" HOSTNAME="$DEFAULT_HOST" NODE_OPTIONS="--inspect=0.0.0.0:${INSPECT_PORT}" $next_bin dev -H "$DEFAULT_HOST" -p "$p" > "$LOG_FILE" 2>&1 & echo $! > "$pid_file")
   elif [ "$mode" = "dev" ]; then
-    (cd "${PROJECT_DIR}" && nohup env PORT="$p" HOSTNAME="$DEFAULT_HOST" $next_bin dev -H "$DEFAULT_HOST" -p "$p" > "$LOG_FILE" 2>&1 &)
+    (cd "${PROJECT_DIR}" && nohup env PORT="$p" HOSTNAME="$DEFAULT_HOST" $next_bin dev -H "$DEFAULT_HOST" -p "$p" > "$LOG_FILE" 2>&1 & echo $! > "$pid_file")
   else
     # prod (운영 모드)
     if [ ! -f "${PROJECT_DIR}/.next/BUILD_ID" ]; then
       echo -e "   ${YELLOW}📦 프로덕션 빌드 부재 감지. 빌드 자동 수행 중...${NC}"
       cmd_compile || return 1
     fi
-    (cd "${PROJECT_DIR}" && nohup env PORT="$p" HOSTNAME="$DEFAULT_HOST" $next_bin start -H "$DEFAULT_HOST" -p "$p" > "$LOG_FILE" 2>&1 &)
+    (cd "${PROJECT_DIR}" && nohup env PORT="$p" HOSTNAME="$DEFAULT_HOST" $next_bin start -H "$DEFAULT_HOST" -p "$p" > "$LOG_FILE" 2>&1 & echo $! > "$pid_file")
   fi
 
   for i in {1..8}; do
