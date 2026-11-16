@@ -1,8 +1,8 @@
-# 네트워크·인프라(`https://neptune.axfoundly.com`, Port `30030`) & 자체 운영 MongoDB(`grain_of_sound`) 아키텍처 가이드
+# 네트워크·인프라(`https://neptune.axfoundly.com`, Port `3030`) & 자체 운영 MongoDB(`grain_of_sound`) 아키텍처 가이드
 
 - **문서 참조**: [`docs/PRDs/gyeol.md`](file:///apps/ex_project_GrainofSound/docs/PRDs/gyeol.md) §4~§5 및 인프라 지정 사양
 - **핵심 인프라 방침**:
-  1. **공식 도메인 및 서비스 포트**: **`https://neptune.axfoundly.com`** / 애플리케이션 바인딩 포트 **`30030`** (`0.0.0.0:30030`, 디버그 인스펙터 포트 `30031`)
+  1. **공식 도메인 및 서비스 포트**: **`https://neptune.axfoundly.com`** / 애플리케이션 바인딩 포트 **`3030`** (`0.0.0.0:3030`, 디버그 인스펙터 포트 `30031`)
   2. **데이터베이스 명칭 (`grain_of_sound`)**: MongoDB 접속 DB명은 **`grain_of_sound`**를 사용하며, 3대 핵심 액션 폼(공연 섭외 신청, 단원 지원, 후원회원 가입 문의) 및 공연 아카이브 데이터를 영속화한다.
   3. **폼 데이터 하이브리드 수신 (DB + 즉시 알림 + 카카오톡 오픈채팅 병행)**:
      - 모달 간편 폼 제출 시 Next.js Serverless API를 통해 MongoDB(`grain_of_sound`)에 안전하게 기록함과 동시에 운영자 이메일(SMTP)/웹훅/스프레드시트로 즉시 알림을 발송한다.
@@ -20,8 +20,8 @@ flowchart TD
         KAKAO["카카오톡 채팅방 공유 스크래퍼 (OG 1200x630)"]
     end
 
-    subgraph AppLayer ["애플리케이션 계층 (https://neptune.axfoundly.com : Port 30030)"]
-        WEB["Next.js App (Port 30030)<br>One-Page 5단계 스토리텔링 + 3대 액션 모달 + Sticky CTA"]
+    subgraph AppLayer ["애플리케이션 계층 (https://neptune.axfoundly.com : Port 3030)"]
+        WEB["Next.js App (Port 3030)<br>One-Page 5단계 스토리텔링 + 3대 액션 모달 + Sticky CTA"]
         API["Serverless Form Handlers<br>/api/actions/performance | member | supporter"]
     end
 
@@ -43,12 +43,12 @@ flowchart TD
 
 ## 2. 네트워크, 포트 및 환경변수 상세 규격
 
-### 2-1. 도메인 및 포트 바인딩 (`Port 30030`)
+### 2-1. 도메인 및 포트 바인딩 (`Port 3030`)
 - **프로덕션/외부 접속 도메인**: `https://neptune.axfoundly.com`
-- **내부 컨테이너/서버 리스닝 포트**: `30030` (`PORT=30030`, `HOSTNAME=0.0.0.0`)
+- **내부 컨테이너/서버 리스닝 포트**: `3030` (`PORT=3030`, `HOSTNAME=0.0.0.0`)
 - **Node.js 디버그 인스펙터 포트**: `30031`
 - **통합 기동 스크립트 (`run_port.sh`)**:
-  - `./run_port.sh dev` / `./run_port.sh prod` 실행 시 기본 포트 `30030`으로 기동한다.
+  - `./run_port.sh dev` / `./run_port.sh prod` 실행 시 기본 포트 `3030`으로 기동한다.
 
 ### 2-2. MongoDB `grain_of_sound` 데이터베이스 구성
 - **접속 URI 규격 (`.env`)**:

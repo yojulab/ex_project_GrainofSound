@@ -3,7 +3,7 @@
 부천을 거점으로 전통연희의 멋을 나누는 비영리 예술 공동체 **「연희단 결 (GYEOL : The Grain of Sound)」**의 브랜드 아이덴티티 대외 홍보, 복지기관·지자체·대사관 공연 섭외 접수, 일반회원(연주 단원) 지원 및 후원회원(서포터즈) 가입 문의를 위한 **Mobile-First 원페이지(One-Page) 공식 웹페이지**입니다.
 
 - **기준 사양서**: [`docs/PRDs/gyeol.md`](file:///apps/ex_project_GrainofSound/docs/PRDs/gyeol.md)
-- **공식 도메인 / 포트**: **`https://neptune.axfoundly.com`** / Port **`30030`** (Node Inspector: `30031`)
+- **공식 도메인 / 포트**: **`https://neptune.axfoundly.com`** / Port **`3030`** (Node Inspector: `30031`)
 - **데이터베이스**: MongoDB **`grain_of_sound`** (`mongodb://.../grain_of_sound`)
 - **디자인 테마**: 레퍼런스(`https://fredericforest.com/`) 기반 한국 전통 **'나무·한지(`#F6F3EC`)·먹색(`#1A1917`)·고목(`#4A3525`)·낙관(`#A63A2B`)'** 에디토리얼 미니멀리즘
 - **핵심 원칙**:
@@ -35,7 +35,7 @@
 MONGODB_URI=mongodb://admin:admin123@graphrag_agent_db_mongo:27017/grain_of_sound?authSource=admin
 
 # 2. 서비스 네트워크 포트 및 공식 도메인 URL
-PORT=30030
+PORT=3030
 NEXT_PUBLIC_APP_URL=https://neptune.axfoundly.com
 BASE_URL=https://neptune.axfoundly.com
 
@@ -59,20 +59,20 @@ npm run seed:reset
 
 ---
 
-## 3. 통합 관리 스크립트 (`run_port.sh` — 기본 포트 `30030`)
+## 3. 통합 관리 스크립트 (`run_port.sh` — 기본 포트 `3030`)
 
-외부 접속 허용을 위한 **Any Host(`0.0.0.0`) 바인딩** 및 **포트 `30030` 실행**, **프로덕션 빌드/컴파일**을 단일 스크립트(`run_port.sh`)로 관리합니다.
+외부 접속 허용을 위한 **Any Host(`0.0.0.0`) 바인딩** 및 **포트 `3030` 실행**, **프로덕션 빌드/컴파일**을 단일 스크립트(`run_port.sh`)로 관리합니다.
 
 ```bash
-# 1. 개발(dev) 모드 기동 (기본 포트 30030)
+# 1. 개발(dev) 모드 기동 (기본 포트 3030)
 ./run_port.sh dev
-./run_port.sh dev 30030
+./run_port.sh dev 3030
 
-# 2. 운영(prod) 모드 기동 (사전 빌드 없으면 자동 컴파일 후 포트 30030 기동)
+# 2. 운영(prod) 모드 기동 (사전 빌드 없으면 자동 컴파일 후 포트 3030 기동)
 ./run_port.sh start
 ./run_port.sh prod
 
-# 3. 디버그 모드 기동 (Port 30030 + Node Inspector 30031)
+# 3. 디버그 모드 기동 (Port 3030 + Node Inspector 30031)
 ./run_port.sh debug
 
 # 4. 서비스 상태 점검 및 중지/재시작
@@ -90,11 +90,11 @@ npm run seed:reset
 - **상위 헌장 및 에이전트 가이드**: [`GEMINI.md`](file:///apps/ex_project_GrainofSound/GEMINI.md), [`AGENTS.md`](file:///apps/ex_project_GrainofSound/AGENTS.md)
 - **도메인 및 아키텍처 규칙 (`.agents/rules/`)**:
   - [`gyeol-domain.md`](file:///apps/ex_project_GrainofSound/.agents/rules/gyeol-domain.md): 한지·먹색·고목 디자인 토큰, 5단계 원페이지 IA, 3대 액션 모달 및 법적 가드레일
-  - [`architecture-mongodb-gcp.md`](file:///apps/ex_project_GrainofSound/.agents/rules/architecture-mongodb-gcp.md): `https://neptune.axfoundly.com` (Port `30030`) 및 MongoDB `grain_of_sound` 아키텍처
+  - [`architecture-mongodb-gcp.md`](file:///apps/ex_project_GrainofSound/.agents/rules/architecture-mongodb-gcp.md): `https://neptune.axfoundly.com` (Port `3030`) 및 MongoDB `grain_of_sound` 아키텍처
   - [`admin-security.md`](file:///apps/ex_project_GrainofSound/.agents/rules/admin-security.md): 법적 가드레일(계좌 미노출), 스팸 방어, 모바일 가독성 및 1.5초 렌더링 규격
   - [`ui-tagging-inspection.md`](file:///apps/ex_project_GrainofSound/.agents/rules/ui-tagging-inspection.md): `Alt+I` UI inspect 일련번호 태깅 규격 (`G00`~`G05`, `M01`~`M03`)
 - **전용 스킬 (`.agents/skills/`)**:
   - [`gyeol-editorial-ui`](file:///apps/ex_project_GrainofSound/.agents/skills/gyeol-editorial-ui/SKILL.md): 에디토리얼 미니멀리즘 UI & 원페이지 5단계 섹션 퍼블리싱 스킬
   - [`gyeol-action-forms`](file:///apps/ex_project_GrainofSound/.agents/skills/gyeol-action-forms/SKILL.md): 3대 핵심 액션 모달 폼 & 법적 가드레일 & 카톡 오픈채팅 연동 스킬
-  - [`gcp-mongo-ops`](file:///apps/ex_project_GrainofSound/.agents/skills/gcp-mongo-ops/SKILL.md): Port `30030` 및 MongoDB `grain_of_sound` 운영/백업 스킬
+  - [`gcp-mongo-ops`](file:///apps/ex_project_GrainofSound/.agents/skills/gcp-mongo-ops/SKILL.md): Port `3030` 및 MongoDB `grain_of_sound` 운영/백업 스킬
   - [`ralph-loop`](file:///apps/ex_project_GrainofSound/.agents/skills/ralph-loop/SKILL.md): 자율 반복 루프 엔지니어링 스킬 (체크리스트: [`.agents/loop/task.md`](file:///apps/ex_project_GrainofSound/.agents/loop/task.md))

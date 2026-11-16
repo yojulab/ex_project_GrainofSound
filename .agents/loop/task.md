@@ -1,7 +1,7 @@
 # Ralph Loop 작업 체크리스트 — 비영리 전통연희단체 「연희단 결 (GYEOL : The Grain of Sound)」 WBS
 
 > **기준 문서**: [`docs/PRDs/gyeol.md`](file:///apps/ex_project_GrainofSound/docs/PRDs/gyeol.md)
-> **서비스 도메인 / 포트**: `https://neptune.axfoundly.com` / Port `30030`
+> **서비스 도메인 / 포트**: `https://neptune.axfoundly.com` / Port `3030`
 > **데이터베이스**: MongoDB `grain_of_sound` (`mongodb://.../grain_of_sound`)
 > 에이전트는 미완료(`[ ]`) 항목 중 1개를 선택하여 구현 및 검증을 완료한 후 `[x]`로 갱신하고 원자적 Git Commit을 수행합니다.
 > 모든 항목이 `[x]`가 되면 사전에 정의된 `completion_promise`를 출력하고 루프를 종료합니다.
@@ -9,7 +9,7 @@
 ## 공정별 활성 태스크 목록 (G-01 ~ G-12)
 
 ### Phase 1. 기반 인프라 · 디자인 시스템 · DB 모델링 (`grain_of_sound`)
-- [x] **G-01**: Next.js (App Router) + TS + Tailwind CSS 초기 설정, Port `30030` (`run_port.sh`), `https://neptune.axfoundly.com` 및 `src/lib/config/env.ts` 무폴백 환경변수 검증 모듈 구축
+- [x] **G-01**: Next.js (App Router) + TS + Tailwind CSS 초기 설정, Port `3030` (`run_port.sh`), `https://neptune.axfoundly.com` 및 `src/lib/config/env.ts` 무폴백 환경변수 검증 모듈 구축
 - [x] **G-02**: 한국 전통 '나무·한지·먹색' 컬러 토큰(`#F6F3EC`, `#EAE4D7`, `#1A1917`, `#5C564F`, `#4A3525`, `#A63A2B`), 타이포그래피(`Cormorant Garamond`, `Noto Serif KR`/`MaruBuri`, `Pretendard`), 한지 노이즈 텍스처(3~5%), `1px solid #D8D0C5` 먹선 및 `Fade-up`(`0.6s`) 모션 구축
 - [x] **G-03**: MongoDB(`grain_of_sound`) 스키마(`PerformanceRequest`, `MemberApplication`, `SupporterInquiry`, `ArchiveItem`, `SiteConfig`, `AdminUser`, `AuditLog`) 정의 및 초기 시드(`npm run seed`) 스크립트 작성
 
