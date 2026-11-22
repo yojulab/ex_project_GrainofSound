@@ -2,7 +2,7 @@
 
 - **문서 참조**: [`docs/PRDs/gyeol.md`](file:///apps/ex_project_GrainofSound/docs/PRDs/gyeol.md)
 - **프로젝트명**: **연희단 결 (GYEOL : The Grain of Sound) 공식 소개 및 섭외·모집 웹페이지**
-- **서비스 URL & 포트**: **`https://neptune.axfoundly.com`** (Port: **`3130`**, Inspector: `3131`)
+- **서비스 URL & 포트**: **`https://haetae.cocolabhub.com`** (Port: **`3130`**, Inspector: `3131`)
 - **데이터베이스**: MongoDB **`grain_of_sound`** (`mongodb://.../grain_of_sound`)
 - **핵심 목적**:
   1. 단체 브랜드 아이덴티티 대외 홍보 ('공식 얼굴' 역할)
@@ -11,7 +11,7 @@
 - **운영 범위 제한 및 절대 가드레일**:
   1. **[GUARD-01] 후원 계좌번호 및 직접 결제창 노출 절대 금지**: 고유번호증 등록 비영리임의단체 기준에 따라 본문, 모달, 푸터 전 영역에 후원 계좌번호 텍스트나 직접 결제 버튼을 노출하지 않으며, 반드시 **'가입 문의 접수 → 담당자 확인 → 1:1 개별 연락을 통한 회비 납부 안내'** 프로세스로만 구현한다.
   2. **[GUARD-02] 내부 운영 기능 전면 배제**: 내부 단원 연습 일정 게시판, 악보/자료 공유, 일반 회원 로그인/회원가입 기능은 구현하지 않는다 (순수 대외 창구 역할에 집중).
-  3. **[GUARD-03] 무로그인 즉시 접근**: 앱 설치 및 회원가입/로그인 절차 없이 단일 URL(`https://neptune.axfoundly.com`) 접속 즉시 전 콘텐츠 열람 및 신청이 가능해야 한다.
+  3. **[GUARD-03] 무로그인 즉시 접근**: 앱 설치 및 회원가입/로그인 절차 없이 단일 URL(`https://haetae.cocolabhub.com`) 접속 즉시 전 콘텐츠 열람 및 신청이 가능해야 한다.
 
 ---
 
@@ -46,7 +46,7 @@
 단일 페이지(`/`)에서 위에서 아래로 자연스럽게 읽히며 신뢰를 쌓고, 하단에서 즉각적인 행동(섭외·지원·후원)으로 이어지는 5단계 구조로 설계한다:
 
 ```text
-https://neptune.axfoundly.com/ (One-Page 공식 웹페이지, Port 3130)
+https://haetae.cocolabhub.com/ (One-Page 공식 웹페이지, Port 3130)
 ├── [Header] 상단 미니멀 로고 ("연희단 결 | GYEOL") + 섹션 앵커 이동
 ├── [Section 01: #hero] Hero (도입부 — 100dvh 풀폭 비주얼 & 슬로건)
 ├── [Section 02: #about] About (단체 소개 & 3대 핵심 가치 카드)
@@ -208,8 +208,8 @@ interface ArchiveItem {
 1. **Open Graph 메타태그 (필수)**:
    - `og:title`: `연희단 결 (GYEOL : The Grain of Sound)`
    - `og:description`: `전통의 결로 이웃과 세계를 잇는 비영리 전통연희단체 연희단 결 공식 페이지입니다. 공연 섭외 및 단원·후원회원 모집 안내`
-   - `og:image`: `https://neptune.axfoundly.com/og-gyeol-hanji.png` (한지 배경 위에 로고와 슬로건이 배치된 `1200x630` 비율 대표 썸네일)
-   - `og:url`: `https://neptune.axfoundly.com`
+   - `og:image`: `https://haetae.cocolabhub.com/og-gyeol-hanji.png` (한지 배경 위에 로고와 슬로건이 배치된 `1200x630` 비율 대표 썸네일)
+   - `og:url`: `https://haetae.cocolabhub.com`
 2. **인앱 브라우저 뷰포트 최적화**:
    - 모바일 카카오톡 인앱 브라우저의 상하단 주소창 가림 현상을 방지하기 위해 높이 단위는 `100vh` 대신 **`100dvh`(Dynamic Viewport Height)**를 사용한다.
 3. **이미지 및 초기 렌더링 성능**:

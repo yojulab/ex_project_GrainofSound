@@ -49,5 +49,5 @@
 
 ## 4. 업무 지시 및 가드레일 준수 원칙
 
-- 모든 에이전트는 [`docs/PRDs/gyeol.md`](file:///apps/ex_project_GrainofSound/docs/PRDs/gyeol.md)에 명시된 디자인 토큰, 5단계 원페이지 IA, 3대 액션 폼 규격과 인프라 변경 사항(**`https://neptune.axfoundly.com`**, Port **`3130`**, DB **`grain_of_sound`**)을 철저히 준수한다.
+- 모든 에이전트는 [`docs/PRDs/gyeol.md`](file:///apps/ex_project_GrainofSound/docs/PRDs/gyeol.md)에 명시된 디자인 토큰, 5단계 원페이지 IA, 3대 액션 폼 규격과 인프라 변경 사항(**`https://haetae.cocolabhub.com`**, Port **`3130`**, DB **`grain_of_sound`**)을 철저히 준수한다.
 - 모든 에이전트는 각 단위 마일스톤 또는 세부 작업 완료 시 [.agents/rules/git-workflow.md](file:///apps/ex_project_GrainofSound/.agents/rules/git-workflow.md)에 따라 **Git Commit을 반드시 수행**한다.

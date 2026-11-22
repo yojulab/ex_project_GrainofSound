@@ -68,11 +68,11 @@ description: "비영리 전통연희단체 「연희단 결 (GYEOL : The Grain o
 
 ## 3. 카카오톡 공유 Open Graph 메타태그 규격
 
-`https://neptune.axfoundly.com` 공유 시 카카오톡 채팅방에 품격 있는 미리보기 카드가 노출되도록 메타데이터를 설정한다:
+`https://haetae.cocolabhub.com` 공유 시 카카오톡 채팅방에 품격 있는 미리보기 카드가 노출되도록 메타데이터를 설정한다:
 - `og:title`: `연희단 결 (GYEOL : The Grain of Sound)`
 - `og:description`: `전통의 결로 이웃과 세계를 잇는 비영리 전통연희단체 연희단 결 공식 페이지입니다. 공연 섭외 및 단원·후원회원 모집 안내`
 - `og:image`: 한지 배경(`#F6F3EC`) 위에 로고와 슬로건이 배치된 `1200x630` 비율 대표 썸네일
-- `og:url`: `https://neptune.axfoundly.com`
+- `og:url`: `https://haetae.cocolabhub.com`
 
 ---
 

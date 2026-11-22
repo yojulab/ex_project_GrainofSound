@@ -1,18 +1,18 @@
 ---
 name: gcp-mongo-ops
-description: "연희단 결(GYEOL) 인프라 프로비저닝, https://neptune.axfoundly.com (Port 3130) 배포 및 자체 운영 MongoDB(grain_of_sound) 구축·운영 스킬. GCE VM/컨테이너 MongoDB(grain_of_sound) 설정, No Public IP 보안 격리, SCRAM-SHA-256 인증, 일일 자동 mongodump 백업(GCS 연동) 및 복구(restore) 리허설 수행 시 사용한다."
+description: "연희단 결(GYEOL) 인프라 프로비저닝, https://haetae.cocolabhub.com (Port 3130) 배포 및 자체 운영 MongoDB(grain_of_sound) 구축·운영 스킬. GCE VM/컨테이너 MongoDB(grain_of_sound) 설정, No Public IP 보안 격리, SCRAM-SHA-256 인증, 일일 자동 mongodump 백업(GCS 연동) 및 복구(restore) 리허설 수행 시 사용한다."
 ---
 
-# 인프라(`https://neptune.axfoundly.com`, Port `3130`) & MongoDB(`grain_of_sound`) 운영 스킬
+# 인프라(`https://haetae.cocolabhub.com`, Port `3130`) & MongoDB(`grain_of_sound`) 운영 스킬
 
-비영리 전통연희단체 「연희단 결 (GYEOL : The Grain of Sound)」 공식 웹페이지(`https://neptune.axfoundly.com`, Port `3130`)의 백엔드 데이터베이스(`grain_of_sound`)를 자체 구축·운영하고, 안전한 사설망 통신 및 자동 백업 체계를 관리하는 절차다.
+비영리 전통연희단체 「연희단 결 (GYEOL : The Grain of Sound)」 공식 웹페이지(`https://haetae.cocolabhub.com`, Port `3130`)의 백엔드 데이터베이스(`grain_of_sound`)를 자체 구축·운영하고, 안전한 사설망 통신 및 자동 백업 체계를 관리하는 절차다.
 
 ---
 
 ## 1. MongoDB `grain_of_sound` 자체 구축 및 계정 절차
 
 ### 1-1. 데이터베이스 및 네트워크 사양
-- **서비스 도메인**: `https://neptune.axfoundly.com`
+- **서비스 도메인**: `https://haetae.cocolabhub.com`
 - **애플리케이션 바인딩 포트**: `3130` (디버그 포트: `3131`)
 - **대상 데이터베이스명**: **`grain_of_sound`**
 - **컨테이너/로컬 접속 URI (`.env`)**:
@@ -50,9 +50,9 @@ EOF
    # 프로덕션 빌드 및 기동 (Port 3130)
    ./run_port.sh prod
    ```
-2. **Cloud Run / 리버스 프록시 배포 (`https://neptune.axfoundly.com`)**:
+2. **Cloud Run / 리버스 프록시 배포 (`https://haetae.cocolabhub.com`)**:
    - 외부 HTTPS(`443`) 트래픽을 내부 컨테이너 포트 `3130`으로 라우팅한다.
-   - 환경 변수 `PORT=3130`, `NEXT_PUBLIC_APP_URL=https://neptune.axfoundly.com`, `BASE_URL=https://neptune.axfoundly.com`, `MONGODB_URI`를 주입한다.
+   - 환경 변수 `PORT=3130`, `NEXT_PUBLIC_APP_URL=https://haetae.cocolabhub.com`, `BASE_URL=https://haetae.cocolabhub.com`, `MONGODB_URI`를 주입한다.
 
 ---
 

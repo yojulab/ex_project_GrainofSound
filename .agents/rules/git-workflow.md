@@ -23,7 +23,7 @@
 | 타입 | 의미 | 예시 |
 | :--- | :--- | :--- |
 | **`feat:`** | 신규 섹션 UI, 모달 폼, API 구현 | `feat(ui): 한지·먹색 디자인 토큰 및 Hero(100dvh)·About 섹션 구현 [G-04, G-05]`<br>`feat(modal): 3대 핵심 액션 모달(공연신청/단원지원/후원문의) 및 카톡 직통 연결 [G-09]` |
-| **`infra:`** | 포트 3130, 도메인, MongoDB `grain_of_sound` 설정 | `infra(env): neptune.axfoundly.com(Port 3130) 및 grain_of_sound DB 연동 [G-01]` |
+| **`infra:`** | 포트 3130, 도메인, MongoDB `grain_of_sound` 설정 | `infra(env): haetae.cocolabhub.com(Port 3130) 및 grain_of_sound DB 연동 [G-01]` |
 | **`arch:`** | Mongoose 데이터 모델 및 스키마 정의 | `arch(db): grain_of_sound 4대 핵심 스키마(공연신청/단원지원/후원문의/아카이브) 정의 [G-03]` |
 | **`docs:`** | 작업지시서, README, 운영 가이드 | `docs: 연희단 결(GYEOL) 프로젝트 README 및 기동 매뉴얼 갱신` |
 | **`rule:`** | 하네스 규칙, 에이전트 역할, 전용 스킬 갱신 | `rule: 연희단 결(GYEOL) v1.0.0 하네스 엔지니어링 헌장 및 전용 스킬 구축` |
@@ -38,4 +38,4 @@
 2. **법적·운영 가드레일 준수**:
    - 본문, 모달, 푸터 어디에도 **후원 계좌번호나 직접 결제 버튼**이 포함되지 않았는가?
    - 일반 방문자 로그인/회원가입이나 내부 연습 일정 게시판 등 범위 외 기능이 포함되지 않았는가?
-3. **인프라 규격 일치**: 도메인(`https://neptune.axfoundly.com`), 포트(`3130`), DB명(`grain_of_sound`)이 일관되게 반영되었는가?
+3. **인프라 규격 일치**: 도메인(`https://haetae.cocolabhub.com`), 포트(`3130`), DB명(`grain_of_sound`)이 일관되게 반영되었는가?

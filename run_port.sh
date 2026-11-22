@@ -4,7 +4,7 @@
 #
 # [특징]
 #   • 올인원(All-in-One) 통합 매니저: 컴파일, 빌드, 기동, 중지, 재시작, 시드, 상태 점검 단일화
-#   • Any Host 바인딩: 0.0.0.0 바인딩으로 외부 도메인(https://neptune.axfoundly.com) 및 어디서든 접속 가능
+#   • Any Host 바인딩: 0.0.0.0 바인딩으로 외부 도메인(https://haetae.cocolabhub.com) 및 어디서든 접속 가능
 #   • Any Port 지원: 기본 포트(3130) 외에 임의의 포트(Any Port) 지정 실행 지원
 #   • 운영(prod) / 개발(dev) / 디버그(debug, 인스펙터 3131) 모드 완벽 지원
 #   • MongoDB (grain_of_sound) 연결 상태 자동 점검 및 TypeScript 타입 검사/클린 빌드 내장
@@ -61,7 +61,7 @@ fi
 DEFAULT_PORT="${PORT:-${ENV_PORT:-3130}}"
 DEFAULT_HOST="0.0.0.0"
 INSPECT_PORT="${INSPECT_PORT:-3131}"
-PUBLIC_DOMAIN="${ENV_APP_URL:-https://neptune.axfoundly.com}"
+PUBLIC_DOMAIN="${ENV_APP_URL:-https://haetae.cocolabhub.com}"
 LOG_FILE="${PROJECT_DIR}/server.log"
 
 # 터미널 색상 정의
