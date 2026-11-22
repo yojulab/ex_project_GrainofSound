@@ -2,7 +2,7 @@
 
 - **프로젝트명**: 연희단 결 (GYEOL : The Grain of Sound) 공식 소개 및 섭외·모집 웹페이지 구축
 - **기준 사양서**: [`docs/PRDs/gyeol.md`](file:///apps/ex_project_GrainofSound/docs/PRDs/gyeol.md) (비영리 전통연희단체 「연희단 결 (GYEOL : The Grain of Sound)」 공식 웹페이지 작업 지시서)
-- **서비스 도메인 & 포트**: **`https://neptune.axfoundly.com`** / 서비스 포트 **`3030`** (Node 디버그 인스펙터 포트: `3031`)
+- **서비스 도메인 & 포트**: **`https://neptune.axfoundly.com`** / 서비스 포트 **`3130`** (Node 디버그 인스펙터 포트: `3131`)
 - **데이터베이스**: MongoDB 자체 운영 — 접속 DB명: **`grain_of_sound`** (`mongodb://.../grain_of_sound`)
 - **성격**: 단체 브랜드 아이덴티티 대외 홍보('공식 얼굴'), 부천 관내 복지기관 및 지자체·대사관 공연 섭외 접수, 일반회원(연주 단원) 지원 및 후원회원(서포터즈) 가입 문의 유치를 위한 **Mobile-First 원페이지(One-Page) 스토리텔링 웹 + 3대 액션 접수·아카이브 백엔드**
 - **확정 기술 스택**: React + Next.js (App Router) + TypeScript + Tailwind CSS + MongoDB (`grain_of_sound`) + 카카오톡 오픈채팅/SMTP/스프레드시트 알림 연동
@@ -38,7 +38,7 @@
    - **Section 05(Action Center)** 본문 영역과 **화면 최하단 고정 바(Sticky Bottom CTA)** 두 곳에서 3대 핵심 액션(`[공연 신청하기]`, `[일반회원(단원) 지원]`, `[후원회원 가입 문의]`)을 트리거할 수 있어야 한다.
    - 각 버튼 클릭 시 맞춤형 간편 폼 모달(방식 A: MongoDB `grain_of_sound` 저장 + 운영자 즉시 알림)과 **카카오톡 오픈채팅 1:1 직통 버튼(방식 B)**을 병행 제공한다.
 6. **환경 중요 변수 `.env` 엄격 관리 (코드 내 디폴트값 전면 금지)**:
-   - `MONGODB_URI`(DB명: `grain_of_sound`), `PORT`(`3030`), `NEXT_PUBLIC_APP_URL`(`https://neptune.axfoundly.com`), `BASE_URL`(`https://neptune.axfoundly.com`), `SESSION_SECRET`, `SMTP_*`, `NEXT_PUBLIC_KAKAO_OPENCHAT_URL` 등 모든 중요 환경 변수는 반드시 `.env` 파일을 통해서만 관리한다.
+   - `MONGODB_URI`(DB명: `grain_of_sound`), `PORT`(`3130`), `NEXT_PUBLIC_APP_URL`(`https://neptune.axfoundly.com`), `BASE_URL`(`https://neptune.axfoundly.com`), `SESSION_SECRET`, `SMTP_*`, `NEXT_PUBLIC_KAKAO_OPENCHAT_URL` 등 모든 중요 환경 변수는 반드시 `.env` 파일을 통해서만 관리한다.
    - 코드베이스 내 `process.env.XXX || 'default'` 형태의 대체값(Fallback) 및 하드코딩된 자격증명/URI/시크릿 작성을 일체 금지하며, 필수 환경변수 누락 시 즉시 명시적 예외(`CRITICAL CONFIG ERROR`)를 발생시킨다.
 
 ---
@@ -82,7 +82,7 @@ flowchart TD
 | **Editorial UI & Motion Engineer** | **Gemini Flash** | 한지·먹색·고목 디자인 토큰, 한지 노이즈 텍스처, 5단계 원페이지 스토리텔링(Hero/About/Repertoire/Join/Footer), 아카이브 라이트박스, `100dvh` & `Fade-up` 모션 | `gyeol-editorial-ui` |
 | **Action Forms & Conversion Engineer** | **Gemini Flash** | Section 05 & Sticky Bottom CTA 연동, 3대 맞춤형 모달 폼(공연 신청/단원 지원/후원 문의), 법적 안내 문구, 카카오톡 오픈채팅 직결 버튼, UI inspect 태깅 | `gyeol-action-forms`, `gyeol-editorial-ui` |
 | **Backend, DB & Notification Engineer** | **Gemini Pro** | `.env` 무폴백 검증, MongoDB(`grain_of_sound`) 스키마 및 3대 접수 API, 스팸 방지(Honeypot/Rate-limit), 이메일/웹훅 알림, 운영자용 경량 접수/아카이브 관리 | `gyeol-action-forms`, `gcp-mongo-ops` |
-| **Infra, SEO & Kakao Optimization Engineer** | **Gemini Flash** | `https://neptune.axfoundly.com` 및 Port `3030` 기동(`run_port.sh`), 카카오톡 OG 메타태그(`1200x630` 한지 썸네일), WebP 최적화(1.5s 렌더링), DB 백업/복구 | `gcp-mongo-ops` |
+| **Infra, SEO & Kakao Optimization Engineer** | **Gemini Flash** | `https://neptune.axfoundly.com` 및 Port `3130` 기동(`run_port.sh`), 카카오톡 OG 메타태그(`1200x630` 한지 썸네일), WebP 최적화(1.5s 렌더링), DB 백업/복구 | `gcp-mongo-ops` |
 | **QA & Legal/UX Critic** | **Gemini Pro** | PRD §6 5대 체크리스트 및 G-AC-01~12 자동 검증(후원 계좌번호/결제창 노출 0건 스캔, 카톡 인앱 `100dvh`·Sticky 바 검증, 3대 모달 E2E, KWCAG 2.2 접근성) | `gyeol-action-forms`, `gyeol-editorial-ui` |
 
 ---
@@ -91,7 +91,7 @@ flowchart TD
 
 ### 3-1. 프로젝트 규칙 (`.agents/rules/`)
 - [gyeol-domain.md](file:///apps/ex_project_GrainofSound/.agents/rules/gyeol-domain.md): 연희단 결(GYEOL) 디자인 토큰, 타이포그래피, 원페이지 5단계 IA, 3대 액션 폼 명세, 법적 가드레일 및 `grain_of_sound` 데이터 모델
-- [architecture-mongodb-gcp.md](file:///apps/ex_project_GrainofSound/.agents/rules/architecture-mongodb-gcp.md): `https://neptune.axfoundly.com` (Port `3030`), GCE 자체 운영 MongoDB(`grain_of_sound`), VPC 격리, 일일 백업(GCS)
+- [architecture-mongodb-gcp.md](file:///apps/ex_project_GrainofSound/.agents/rules/architecture-mongodb-gcp.md): `https://neptune.axfoundly.com` (Port `3130`), GCE 자체 운영 MongoDB(`grain_of_sound`), VPC 격리, 일일 백업(GCS)
 - [admin-security.md](file:///apps/ex_project_GrainofSound/.agents/rules/admin-security.md): 3대 폼 스팸 방어, 개인정보 보호, 운영자 접수 내역 조회 인증 보안, 웹 접근성(KWCAG 2.2) 및 Lighthouse 모바일 성능(1.5초 이내 렌더링)
 - [ui-tagging-inspection.md](file:///apps/ex_project_GrainofSound/.agents/rules/ui-tagging-inspection.md): 의뢰자 소통용 `Alt+I` UI inspect 일련번호 체계 (`G00`~`G05`, `M01`~`M03`, `A00`~`A04`)
 - [git-workflow.md](file:///apps/ex_project_GrainofSound/.agents/rules/git-workflow.md): 업무 단위별 원자적 Git Commit 규약 (`G-01` ~ `G-12`)
@@ -101,7 +101,7 @@ flowchart TD
 ### 3-2. 전문 스킬 (`.agents/skills/`)
 - [gyeol-editorial-ui](file:///apps/ex_project_GrainofSound/.agents/skills/gyeol-editorial-ui/SKILL.md): 한국 전통 '나무·한지·먹색' 에디토리얼 디자인 시스템 및 원페이지 5단계 섹션·카카오톡 인앱(`100dvh`)·라이트박스 퍼블리싱 스킬
 - [gyeol-action-forms](file:///apps/ex_project_GrainofSound/.agents/skills/gyeol-action-forms/SKILL.md): 3대 액션 모달 폼(공연 신청, 단원 지원, 후원 문의), 비영리임의단체 법적 준수(계좌/결제 원천 배제), 카카오톡 오픈채팅 연동 및 `grain_of_sound` DB 저장 스킬
-- [gcp-mongo-ops](file:///apps/ex_project_GrainofSound/.agents/skills/gcp-mongo-ops/SKILL.md): GCE MongoDB(`grain_of_sound`) 운영, Port `3030` / `https://neptune.axfoundly.com` 배포 및 백업·복구 스킬
+- [gcp-mongo-ops](file:///apps/ex_project_GrainofSound/.agents/skills/gcp-mongo-ops/SKILL.md): GCE MongoDB(`grain_of_sound`) 운영, Port `3130` / `https://neptune.axfoundly.com` 배포 및 백업·복구 스킬
 - [harness](file:///apps/ex_project_GrainofSound/.agents/skills/harness/SKILL.md): 하네스 설계 및 에이전트/스킬 동기화 스킬
 - [ralph-loop](file:///apps/ex_project_GrainofSound/.agents/skills/ralph-loop/SKILL.md): 완료 약속 달성 시까지 자율 반복 실행하는 루프 엔지니어링 스킬
 - [harness-evolve](file:///apps/ex_project_GrainofSound/.agents/skills/harness-evolve/SKILL.md): 실행 결과 피드백 수집·일반화 및 하네스 진화 스킬
@@ -110,7 +110,7 @@ flowchart TD
 
 ## 4. WBS 및 공정 단계 (연희단 결 G-01 ~ G-12)
 
-- **G-01. 프로젝트 기반 및 환경변수 무폴백 설정**: Next.js (App Router) + TS + Tailwind CSS 설정, Port `3030`, 도메인 `https://neptune.axfoundly.com`, MongoDB `grain_of_sound` 연결 및 `src/lib/config/env.ts` 무폴백 검증 모듈 구현 (`run_port.sh` 포트 `3030` 구성)
+- **G-01. 프로젝트 기반 및 환경변수 무폴백 설정**: Next.js (App Router) + TS + Tailwind CSS 설정, Port `3130`, 도메인 `https://neptune.axfoundly.com`, MongoDB `grain_of_sound` 연결 및 `src/lib/config/env.ts` 무폴백 검증 모듈 구현 (`run_port.sh` 포트 `3130` 구성)
 - **G-02. 디자인 시스템 및 한지·먹색 에디토리얼 테마 구축**: 6대 컬러 토큰(`#F6F3EC`, `#EAE4D7`, `#1A1917`, `#5C564F`, `#4A3525`, `#A63A2B`), 타이포그래피(`Cormorant Garamond`, `Noto Serif KR`/`MaruBuri`, `Pretendard`), 한지 노이즈 텍스처(3~5%), `1px solid #D8D0C5` 먹선 유틸리티, `Fade-up`(`0.6s`) 모션 컴포넌트 구현
 - **G-03. MongoDB(`grain_of_sound`) 데이터 모델 및 시드 구축**: `PerformanceRequest`(공연 신청), `MemberApplication`(단원 지원), `SupporterInquiry`(후원회원 문의), `ArchiveItem`(공연 프로그램 및 활동 사진첩), `SiteConfig`(단체 기본정보), `AdminUser`, `AuditLog` 스키마 및 초기 시드(`npm run seed`) 구현
 - **G-04. Section 01 Hero (도입부) & 미니멀 헤더 구현**: `연희단 결 | GYEOL` 미니멀 로고, 영문 슬로건(*"The Grain of Sound, GYEOL"*), 국문 서브 카피(*"나무와 가죽, 사람의 숨결이 빚어내는 우리 소리의 결"*), 장구·소고 먹선/세피아 비주얼 풀폭 배치, `100dvh` 대응 및 스크롤 유도 인디케이터 구현
@@ -132,4 +132,4 @@ flowchart TD
 
 | 일자 | 버전 | 변경 내용 | 대상 파일 / 규칙 |
 | :--- | :--- | :--- | :--- |
-| 2026-11-15 | **v1.0.0** | **`docs/PRDs/gyeol.md` 기반 비영리 전통연희단체 「연희단 결 (GYEOL : The Grain of Sound)」 하네스 엔지니어링 전면 구성**:<br>① **네트워크 및 도메인 확정**: `https://neptune.axfoundly.com`, 서비스 포트 `3030` (디버그 포트 `3031`) 반영<br>② **데이터베이스 전환**: MongoDB 접속 DB명을 `grain_of_sound`로 변경 반영 (`.env`, `.env.example`, 인프라/백업 스크립트 동기화)<br>③ **디자인 & 도메인 규칙 정립**: Frederic Forest 레퍼런스 기반 한국 전통 '나무·한지·먹색' 컬러 토큰(`#F6F3EC`, `#EAE4D7`, `#1A1917`, `#4A3525`, `#A63A2B`), 5단계 원페이지 스토리텔링 IA, 카카오톡 인앱(`100dvh` & OG 태그) 규칙 수립<br>④ **법적 가드레일 및 3대 액션 폼 설계**: 후원 계좌번호·직접 결제창 노출 절대 금지(1:1 개별 안내 프로세스), `[공연 신청하기]`·`[일반회원(단원) 지원]`·`[후원회원 가입 문의]` 모달 + 카카오톡 오픈채팅 병행 아키텍처 및 6대 에이전트 팀/전용 스킬(`gyeol-editorial-ui`, `gyeol-action-forms`) 구축 | `GEMINI.md`, `AGENTS.md`, `.env`, `.env.example`, `.agents/rules/*`, `.agents/skills/*` |
+| 2026-11-15 | **v1.0.0** | **`docs/PRDs/gyeol.md` 기반 비영리 전통연희단체 「연희단 결 (GYEOL : The Grain of Sound)」 하네스 엔지니어링 전면 구성**:<br>① **네트워크 및 도메인 확정**: `https://neptune.axfoundly.com`, 서비스 포트 `3130` (디버그 포트 `3131`) 반영<br>② **데이터베이스 전환**: MongoDB 접속 DB명을 `grain_of_sound`로 변경 반영 (`.env`, `.env.example`, 인프라/백업 스크립트 동기화)<br>③ **디자인 & 도메인 규칙 정립**: Frederic Forest 레퍼런스 기반 한국 전통 '나무·한지·먹색' 컬러 토큰(`#F6F3EC`, `#EAE4D7`, `#1A1917`, `#4A3525`, `#A63A2B`), 5단계 원페이지 스토리텔링 IA, 카카오톡 인앱(`100dvh` & OG 태그) 규칙 수립<br>④ **법적 가드레일 및 3대 액션 폼 설계**: 후원 계좌번호·직접 결제창 노출 절대 금지(1:1 개별 안내 프로세스), `[공연 신청하기]`·`[일반회원(단원) 지원]`·`[후원회원 가입 문의]` 모달 + 카카오톡 오픈채팅 병행 아키텍처 및 6대 에이전트 팀/전용 스킬(`gyeol-editorial-ui`, `gyeol-action-forms`) 구축 | `GEMINI.md`, `AGENTS.md`, `.env`, `.env.example`, `.agents/rules/*`, `.agents/skills/*` |

@@ -4,10 +4,10 @@
   "private": true,
   "description": "비영리 전통연희단체 연희단 결 (GYEOL : The Grain of Sound) 공식 소개 및 섭외·모집 웹페이지",
   "scripts": {
-    "dev": "next dev -H 0.0.0.0 -p ${PORT:-3030}",
-    "dev:3030": "next dev -H 0.0.0.0 -p 3030",
+    "dev": "next dev -H 0.0.0.0 -p ${PORT:-3130}",
+    "dev:3130": "next dev -H 0.0.0.0 -p 3130",
     "build": "next build",
-    "start": "next start -H 0.0.0.0 -p ${PORT:-3030}",
+    "start": "next start -H 0.0.0.0 -p ${PORT:-3130}",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "seed": "tsx --env-file=.env src/scripts/seed.ts",

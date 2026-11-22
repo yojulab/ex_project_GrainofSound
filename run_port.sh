@@ -5,17 +5,17 @@
 # [특징]
 #   • 올인원(All-in-One) 통합 매니저: 컴파일, 빌드, 기동, 중지, 재시작, 시드, 상태 점검 단일화
 #   • Any Host 바인딩: 0.0.0.0 바인딩으로 외부 도메인(https://neptune.axfoundly.com) 및 어디서든 접속 가능
-#   • Any Port 지원: 기본 포트(3030) 외에 임의의 포트(Any Port) 지정 실행 지원
-#   • 운영(prod) / 개발(dev) / 디버그(debug, 인스펙터 3031) 모드 완벽 지원
+#   • Any Port 지원: 기본 포트(3130) 외에 임의의 포트(Any Port) 지정 실행 지원
+#   • 운영(prod) / 개발(dev) / 디버그(debug, 인스펙터 3131) 모드 완벽 지원
 #   • MongoDB (grain_of_sound) 연결 상태 자동 점검 및 TypeScript 타입 검사/클린 빌드 내장
 #
 # [사용법 요약]
 #   [서버 기동/중지/상태]
-#     ./run_port.sh start [PORT]            : 운영(prod) 모드 기동 (사전 빌드 없으면 자동 빌드, 기본 3030)
+#     ./run_port.sh start [PORT]            : 운영(prod) 모드 기동 (사전 빌드 없으면 자동 빌드, 기본 3130)
 #     ./run_port.sh prod [PORT]             : 운영(prod) 모드 기동
-#     ./run_port.sh dev [PORT]              : 개발(dev) 모드 기동 (기본 3030)
-#     ./run_port.sh debug [PORT]            : 디버그 모드 (Node 인스펙터 3031)
-#     ./run_port.sh [PORT]                  : 숫자 포트만 입력 시 운영 모드로 즉시 기동 (예: ./run_port.sh 3030)
+#     ./run_port.sh dev [PORT]              : 개발(dev) 모드 기동 (기본 3130)
+#     ./run_port.sh debug [PORT]            : 디버그 모드 (Node 인스펙터 3131)
+#     ./run_port.sh [PORT]                  : 숫자 포트만 입력 시 운영 모드로 즉시 기동 (예: ./run_port.sh 3130)
 #     ./run_port.sh stop [PORT]             : 프로세스 중지
 #     ./run_port.sh restart [dev|prod] [PORT]: 서비스 재시작
 #     ./run_port.sh status [PORT]           : 포트 및 서비스 상태 확인
@@ -49,7 +49,7 @@ fi
 
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# .env에서 PORT 및 PUBLIC URL 읽기 (하드코딩 폴백 대신 .env 우선 참조, 기본 포트 3030)
+# .env에서 PORT 및 PUBLIC URL 읽기 (하드코딩 폴백 대신 .env 우선 참조, 기본 포트 3130)
 ENV_FILE="${PROJECT_DIR}/.env"
 ENV_PORT=""
 ENV_APP_URL=""
@@ -58,9 +58,9 @@ if [ -f "$ENV_FILE" ]; then
   ENV_APP_URL=$(grep -E '^[[:space:]]*NEXT_PUBLIC_APP_URL=' "$ENV_FILE" | head -n 1 | cut -d '=' -f2- | tr -d '"' | tr -d "'" | tr -d '\r' || true)
 fi
 
-DEFAULT_PORT="${PORT:-${ENV_PORT:-3030}}"
+DEFAULT_PORT="${PORT:-${ENV_PORT:-3130}}"
 DEFAULT_HOST="0.0.0.0"
-INSPECT_PORT="${INSPECT_PORT:-3031}"
+INSPECT_PORT="${INSPECT_PORT:-3131}"
 PUBLIC_DOMAIN="${ENV_APP_URL:-https://neptune.axfoundly.com}"
 LOG_FILE="${PROJECT_DIR}/server.log"
 
@@ -408,11 +408,11 @@ cmd_help() {
   echo -e "${CYAN} 🥁 연희단 결 (GYEOL) run_port.sh 통합 관리 명령어${NC}"
   echo -e "${CYAN}=================================================================${NC}"
   echo -e "  ${BOLD}[서버 기동 / 제어]${NC}"
-  echo -e "  • ${BOLD}./run_port.sh dev [PORT]${NC}              : 개발 모드 기동 (기본 포트: 3030)"
-  echo -e "  • ${BOLD}./run_port.sh start [PORT]${NC}            : 운영(prod) 모드 기동 (기본 포트: 3030)"
+  echo -e "  • ${BOLD}./run_port.sh dev [PORT]${NC}              : 개발 모드 기동 (기본 포트: 3130)"
+  echo -e "  • ${BOLD}./run_port.sh start [PORT]${NC}            : 운영(prod) 모드 기동 (기본 포트: 3130)"
   echo -e "  • ${BOLD}./run_port.sh prod [PORT]${NC}             : 운영(prod) 모드 기동"
-  echo -e "  • ${BOLD}./run_port.sh debug [PORT]${NC}            : 디버그 모드 기동 (인스펙터 3031)"
-  echo -e "  • ${BOLD}./run_port.sh [PORT]${NC}                  : 지정 포트로 운영 모드 즉시 기동 (예: ./run_port.sh 3030)"
+  echo -e "  • ${BOLD}./run_port.sh debug [PORT]${NC}            : 디버그 모드 기동 (인스펙터 3131)"
+  echo -e "  • ${BOLD}./run_port.sh [PORT]${NC}                  : 지정 포트로 운영 모드 즉시 기동 (예: ./run_port.sh 3130)"
   echo -e "  • ${BOLD}./run_port.sh stop [PORT]${NC}             : 서비스 종료"
   echo -e "  • ${BOLD}./run_port.sh restart [dev|prod] [PORT]${NC}: 서비스 재시작"
   echo -e "  • ${BOLD}./run_port.sh status [PORT]${NC}           : 포트 및 프로세스 상태 점검"
@@ -435,7 +435,7 @@ ACTION="${1:-status}"
 ARG2="${2:-}"
 ARG3="${3:-}"
 
-# 첫 번째 인자가 숫자인 경우 (예: ./run_port.sh 3030) -> 해당 포트로 운영 모드 즉시 기동
+# 첫 번째 인자가 숫자인 경우 (예: ./run_port.sh 3130) -> 해당 포트로 운영 모드 즉시 기동
 if [[ "$ACTION" =~ ^[0-9]+$ ]]; then
   PORT="$ACTION"
   cmd_start "prod" "$PORT"

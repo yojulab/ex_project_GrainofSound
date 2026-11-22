@@ -2,16 +2,16 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Next.js: Debug Server (Port 3030)",
+      "name": "Next.js: Debug Server (Port 3130)",
       "type": "node-terminal",
       "request": "launch",
-      "command": "npm run dev:3030"
+      "command": "npm run dev:3130"
     },
     {
-      "name": "Next.js: Full Stack (Server + Chrome, Port 3030)",
+      "name": "Next.js: Full Stack (Server + Chrome, Port 3130)",
       "type": "node-terminal",
       "request": "launch",
-      "command": "npm run dev:3030",
+      "command": "npm run dev:3130",
       "serverReadyAction": {
         "pattern": "- Local:.+(https?://.+)",
         "uriFormat": "%s",
@@ -19,18 +19,18 @@
       }
     },
     {
-      "name": "Next.js: Attach to Node (Port 3031)",
+      "name": "Next.js: Attach to Node (Port 3131)",
       "type": "node",
       "request": "attach",
-      "port": 3031,
+      "port": 3131,
       "restart": true,
       "skipFiles": ["<node_internals>/**"]
     },
     {
-      "name": "Next.js: Debug Client (Chrome, Port 3030)",
+      "name": "Next.js: Debug Client (Chrome, Port 3130)",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:3030",
+      "url": "http://localhost:3130",
       "webRoot": "${workspaceFolder}"
     }
   ]

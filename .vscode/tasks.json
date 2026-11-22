@@ -2,9 +2,9 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Next.js dev (port 3030)",
+      "label": "Next.js dev (port 3130)",
       "type": "npm",
-      "script": "dev:3030",
+      "script": "dev:3130",
       "isBackground": true,
       "problemMatcher": {
         "owner": "nextjs",
@@ -19,7 +19,7 @@
       }
     },
     {
-      "label": "Next.js dev:debug (port 3030 & inspector 3031)",
+      "label": "Next.js dev:debug (port 3130 & inspector 3131)",
       "type": "npm",
       "script": "dev:debug",
       "isBackground": true,

@@ -1,6 +1,6 @@
 # 연희단 결 (GYEOL : The Grain of Sound) — UI inspect 일련번호 태깅 및 원클릭 인스펙션 규격
 
-본 문서는 의뢰자(기획자/클라이언트)와 AI 에이전트 간의 정밀한 UI 소통을 위해 **「연희단 결 (GYEOL : The Grain of Sound)」 공식 원페이지 웹(`https://neptune.axfoundly.com`, Port `3030`) 및 3대 액션 모달 전역에 적용되는 UI inspect 태깅 시스템**의 표준 규격을 정의한다.
+본 문서는 의뢰자(기획자/클라이언트)와 AI 에이전트 간의 정밀한 UI 소통을 위해 **「연희단 결 (GYEOL : The Grain of Sound)」 공식 원페이지 웹(`https://neptune.axfoundly.com`, Port `3130`) 및 3대 액션 모달 전역에 적용되는 UI inspect 태깅 시스템**의 표준 규격을 정의한다.
 
 ---
 

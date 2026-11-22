@@ -2,7 +2,7 @@
 
 - **문서 참조**: [`docs/PRDs/gyeol.md`](file:///apps/ex_project_GrainofSound/docs/PRDs/gyeol.md)
 - **프로젝트명**: **연희단 결 (GYEOL : The Grain of Sound) 공식 소개 및 섭외·모집 웹페이지**
-- **서비스 URL & 포트**: **`https://neptune.axfoundly.com`** (Port: **`3030`**, Inspector: `3031`)
+- **서비스 URL & 포트**: **`https://neptune.axfoundly.com`** (Port: **`3130`**, Inspector: `3131`)
 - **데이터베이스**: MongoDB **`grain_of_sound`** (`mongodb://.../grain_of_sound`)
 - **핵심 목적**:
   1. 단체 브랜드 아이덴티티 대외 홍보 ('공식 얼굴' 역할)
@@ -46,7 +46,7 @@
 단일 페이지(`/`)에서 위에서 아래로 자연스럽게 읽히며 신뢰를 쌓고, 하단에서 즉각적인 행동(섭외·지원·후원)으로 이어지는 5단계 구조로 설계한다:
 
 ```text
-https://neptune.axfoundly.com/ (One-Page 공식 웹페이지, Port 3030)
+https://neptune.axfoundly.com/ (One-Page 공식 웹페이지, Port 3130)
 ├── [Header] 상단 미니멀 로고 ("연희단 결 | GYEOL") + 섹션 앵커 이동
 ├── [Section 01: #hero] Hero (도입부 — 100dvh 풀폭 비주얼 & 슬로건)
 ├── [Section 02: #about] About (단체 소개 & 3대 핵심 가치 카드)

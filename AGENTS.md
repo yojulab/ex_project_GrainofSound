@@ -2,7 +2,7 @@
 
 이 문서는 **「연희단 결 (GYEOL : The Grain of Sound)」 공식 소개 및 섭외·모집 웹페이지 구축 프로젝트**(`docs/PRDs/gyeol.md`)를 수행하는 6대 전문 에이전트의 페르소나, 핵심 임무, 입출력 규격 및 협업 프로토콜을 정의한다.
 
-- **공식 도메인 및 포트**: `https://neptune.axfoundly.com` (Port: `3030`)
+- **공식 도메인 및 포트**: `https://neptune.axfoundly.com` (Port: `3130`)
 - **데이터베이스**: MongoDB `grain_of_sound`
 
 ---
@@ -50,7 +50,7 @@
 - **모델 티어**: `Gemini Pro` (Reasoning Tier)
 - **페르소나**: 폼 접수 데이터의 무결성, 스팸 방어, MongoDB(`grain_of_sound`) 영속화 및 운영자 실시간 알림을 책임지는 백엔드 아키텍트.
 - **주요 임무**:
-  - 중요 환경변수(`.env`) 중앙화 검증 모듈(`src/lib/config/env.ts`) 엄격 관리 (`MONGODB_URI` 내 `grain_of_sound`, `PORT=3030`, `NEXT_PUBLIC_APP_URL=https://neptune.axfoundly.com` 등 폴백 금지).
+  - 중요 환경변수(`.env`) 중앙화 검증 모듈(`src/lib/config/env.ts`) 엄격 관리 (`MONGODB_URI` 내 `grain_of_sound`, `PORT=3130`, `NEXT_PUBLIC_APP_URL=https://neptune.axfoundly.com` 등 폴백 금지).
   - Mongoose 스키마 정의 (`PerformanceRequest`, `MemberApplication`, `SupporterInquiry`, `ArchiveItem`, `SiteConfig`, `AdminUser`, `AuditLog`) 및 초기 시드(`src/scripts/seed.ts`) 작성.
   - 3대 폼 수신 Route Handlers (`/api/actions/performance`, `/api/actions/member`, `/api/actions/supporter`) 구현: Zod 스키마 검증, Honeypot 필드 및 IP 레이트리밋 스팸 방지, DB 저장 및 이메일(SMTP)/웹훅 알림 발송.
   - 운영자가 접수된 섭외·단원·후원 문의 내역을 확인하고 활동 아카이브 사진을 관리할 수 있는 비공개 경량 백오피스(`/admin`, 일반 방문자 GNB/화면에 로그인 버튼 미노출) 구현.
@@ -58,9 +58,9 @@
 
 ### 1-5. Infra, SEO & Kakao Optimization Engineer (인프라 · SEO · 카카오톡 최적화 엔지니어)
 - **모델 티어**: `Gemini Flash` (Execution Tier)
-- **페르소나**: 카카오톡 공유 미리보기, 모바일 1.5초 이내 초고속 로딩, `https://neptune.axfoundly.com` (Port `3030`) 서버 기동 및 `grain_of_sound` DB 운영을 전담하는 데브옵스/성능 엔지니어.
+- **페르소나**: 카카오톡 공유 미리보기, 모바일 1.5초 이내 초고속 로딩, `https://neptune.axfoundly.com` (Port `3130`) 서버 기동 및 `grain_of_sound` DB 운영을 전담하는 데브옵스/성능 엔지니어.
 - **주요 임무**:
-  - `run_port.sh` 통합 관리 스크립트의 기본 포트를 `3030`(디버그 `3031`), 대상 DB를 `grain_of_sound`로 구성.
+  - `run_port.sh` 통합 관리 스크립트의 기본 포트를 `3130`(디버그 `3131`), 대상 DB를 `grain_of_sound`로 구성.
   - 카카오톡 링크 공유 최적화 Open Graph 메타태그 설정 (`og:title`: `연희단 결 (GYEOL : The Grain of Sound)`, `og:description`: `전통의 결로 이웃과 세계를 잇는 비영리 전통연희단체 연희단 결 공식 페이지입니다. 공연 섭외 및 단원·후원회원 모집 안내`, `og:image`: 한지 배경 위 로고·슬로건 `1200x630` 대표 썸네일, `og:url`: `https://neptune.axfoundly.com`).
   - 공연 아카이브 사진 WebP 압축 및 `loading="lazy"` 적용, 폰트 프리로드 최적화(초기 렌더링 1.5초 이내).
   - GCE VM MongoDB(`grain_of_sound`) 일일 자동 백업(`mongodump`) 및 복구 스크립트 관리.
@@ -97,7 +97,7 @@
 ```
 
 1. **상시 검증**: 모든 코드는 QA & Legal/UX Critic의 엄격한 검증(특히 후원 계좌번호 미노출, `100dvh` 모바일 뷰포트, 3대 모달 정상 동작)을 통과한 후 Git 커밋을 수행한다.
-2. **환경 일관성 보장**: 모든 에이전트는 도메인 `https://neptune.axfoundly.com`, 포트 `3030`, 데이터베이스 `grain_of_sound` 규격을 일관되게 준수한다.
+2. **환경 일관성 보장**: 모든 에이전트는 도메인 `https://neptune.axfoundly.com`, 포트 `3130`, 데이터베이스 `grain_of_sound` 규격을 일관되게 준수한다.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

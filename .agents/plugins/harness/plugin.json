@@ -1,7 +1,7 @@
 {
   "name": "harness",
   "version": "1.0.0-gyeol",
-  "description": "Harness Engineering & Multi-Agent Architecture for GYEOL : The Grain of Sound (연희단 결) Official Website (https://neptune.axfoundly.com, Port 3030, MongoDB grain_of_sound, Korean Traditional Hanji-Ink Editorial Design, 3 Action Forms & Kakao In-App Optimization)",
+  "description": "Harness Engineering & Multi-Agent Architecture for GYEOL : The Grain of Sound (연희단 결) Official Website (https://neptune.axfoundly.com, Port 3130, MongoDB grain_of_sound, Korean Traditional Hanji-Ink Editorial Design, 3 Action Forms & Kakao In-App Optimization)",
   "author": "Antigravity & Gemini Team",
   "entrypoint": "skills/harness/SKILL.md",
   "skills": [
