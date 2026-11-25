@@ -14,38 +14,38 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(appUrl),
-  title: "연희단 결 (GYEOL : The Grain of Sound) — 비영리 전통연희단체",
+  title: "Yeonheedan Gyeol — Le Grain du Son | Parcours d’exposition",
   description:
-    "나무와 가죽, 사람의 숨결이 빚어내는 우리 소리의 결. 부천 거점 비영리 전통연희단체 연희단 결 공식 페이지입니다. 나눔·축제 공연 섭외, 단원 지원 및 후원회원 가입 안내",
+    "Le grain du bois, du cuir et du souffle humain. Ensemble artistique à but non lucratif Yeonheedan Gyeol : partage, dialogue culturel Corée–France et transmission des arts traditionnels.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "연희단 결",
+    title: "Yeonheedan Gyeol",
   },
   openGraph: {
-    title: "연희단 결 (GYEOL : The Grain of Sound)",
+    title: "Yeonheedan Gyeol — The Grain of Sound",
     description:
-      "나무와 가죽, 사람의 숨결이 빚어내는 우리 소리의 결 — 전통의 결로 이웃과 세계를 잇는 비영리 전통연희단체 연희단 결 공식 페이지",
+      "Le grain du bois, du cuir et du souffle humain — Association artistique à but non lucratif dédiée aux arts traditionnels coréens.",
     url: appUrl,
-    siteName: "연희단 결 (GYEOL : The Grain of Sound)",
-    locale: "ko_KR",
+    siteName: "Yeonheedan Gyeol (The Grain of Sound)",
+    locale: "fr_FR",
     type: "website",
     images: [
       {
         url: `${appUrl}/og-gyeol-hanji.png`,
         width: 1200,
         height: 630,
-        alt: "연희단 결 (GYEOL : The Grain of Sound) 한지 에디토리얼 대표 이미지",
+        alt: "Yeonheedan Gyeol — Esthétique Hanji et encre",
         type: "image/png",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "연희단 결 (GYEOL : The Grain of Sound)",
+    title: "Yeonheedan Gyeol — The Grain of Sound",
     description:
-      "나무와 가죽, 사람의 숨결이 빚어내는 우리 소리의 결 — 비영리 전통연희단체 연희단 결 공식 페이지",
+      "Le grain du bois, du cuir et du souffle humain — Association artistique à but non lucratif.",
     images: [`${appUrl}/og-gyeol-hanji.png`],
   },
 };
@@ -56,7 +56,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
+    <html lang="fr">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link

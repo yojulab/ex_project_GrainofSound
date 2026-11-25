@@ -25,24 +25,19 @@ const LanguageContext = createContext<LanguageContextValue | null>(null);
 const STORAGE_KEY = "gyeol_lang";
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguageState] = useState<Language>("ko");
+  const [language, setLanguageState] = useState<Language>("fr");
 
   useEffect(() => {
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored === "ko" || stored === "fr") {
-        setLanguageState(stored);
-        document.documentElement.lang = stored;
-      }
+      document.documentElement.lang = "fr";
     } catch {
-      // In SSR or sandboxed environments, localStorage access might throw
+      // ignore
     }
   }, []);
 
   const setLanguage = (newLang: Language) => {
     setLanguageState(newLang);
     try {
-      localStorage.setItem(STORAGE_KEY, newLang);
       document.documentElement.lang = newLang;
     } catch {
       // ignore
